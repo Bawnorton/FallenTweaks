@@ -32,7 +32,6 @@ public class MScreen extends CottonClientScreen {
             if (paragraphs[i] == null || paragraphs[i].getText().isEmpty()) continue;
             json.addProperty(Integer.toString(i), paragraphs[i].getText());
         }
-        System.out.println(json);
         file.write(json.toString());
         file.close();
     }
