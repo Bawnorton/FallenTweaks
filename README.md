@@ -1,9 +1,6 @@
-# Fabric Example Mod
+# Multi Tweaks
 
-## Setup
+Mod that allows you to send text to a server through the press of a key. (24 keybinds)
 
-For setup instructions please see the [fabric wiki page](https://fabricmc.net/wiki/tutorial:setup) that relates to the IDE that you are using.
-
-## License
-
-This template is available under the CC0 license. Feel free to learn from it and incorporate it in your own projects.
+## Dependancies
+LibGui 3.3.5+1.16.5: https://github.com/CottonMC/LibGui/releases/tag/3.3.5
