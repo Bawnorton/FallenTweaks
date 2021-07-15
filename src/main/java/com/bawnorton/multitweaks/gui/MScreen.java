@@ -27,11 +27,13 @@ public class MScreen extends CottonClientScreen {
 
     private void openFile(String path) throws IOException {
         FileWriter file = new FileWriter(path);
+        JsonObject json = new JsonObject();
         for(int i = 0; i < paragraphs.length; i++) {
             if (paragraphs[i] == null || paragraphs[i].getText().isEmpty()) continue;
-            JsonObject json = new JsonObject();
             json.addProperty(Integer.toString(i), paragraphs[i].getText());
-            file.write(json.toString());
         }
+        System.out.println(json);
+        file.write(json.toString());
+        file.close();
     }
 }
