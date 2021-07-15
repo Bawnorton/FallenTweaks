@@ -1,0 +1,12 @@
+{
+  "required": true,
+  "minVersion": "0.8",
+  "package": "com.bawnorton.multitweaks.mixins",
+  "compatibilityLevel": "JAVA_8",
+  "client": [
+    "InGameHubMixin"
+  ],
+  "injectors": {
+    "defaultRequire": 1
+  }
+}
