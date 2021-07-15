@@ -21,7 +21,6 @@ public class MultiTweaksClient implements ClientModInitializer {
     public static MWTextField[] paragraphs = new MWTextField[24];
 
     public void onInitializeClient() {
-        System.out.println("Multitweaks Init");
         for(int i = 0; i < 24; i++) {
             binds[i] = KeyBindingHelper.registerKeyBinding(new KeyBinding(
                     "key.multitweaks.binds." + i,
@@ -40,7 +39,6 @@ public class MultiTweaksClient implements ClientModInitializer {
                     player.sendChatMessage(text);
                 }
             });
-            System.out.println("Bind " + i + " Assigned");
         }
         keyBinding = KeyBindingHelper.registerKeyBinding(new KeyBinding(
                 "key.multitweaks.gui",

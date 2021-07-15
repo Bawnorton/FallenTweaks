@@ -25,10 +25,6 @@
       "com.bawnorton.multitweaks.MultiTweaksClient"
     ]
   },
-  "mixins": [
-    "multitweaks.mixins.json"
-  ],
-
   "depends": {
     "fabricloader": ">=0.7.4",
     "fabric": "*",
