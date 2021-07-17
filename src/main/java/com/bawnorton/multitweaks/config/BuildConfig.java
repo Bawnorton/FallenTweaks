@@ -29,7 +29,7 @@ import static com.bawnorton.multitweaks.MultiTweaksClient.*;
 
 public class BuildConfig {
     public static ConfigBuilder builder;
-    private static final int[] keyCounts = {0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23};
+    public static final int[] keyCounts = {0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23};
 
     public static ConfigBuilder buildScreen(String name, Screen parent) {
         builder = ConfigBuilder.create().setParentScreen(parent).setTitle(new TranslatableText(name));
@@ -54,7 +54,6 @@ public class BuildConfig {
         }
         builder.setSavingRunnable(() -> {
             outer: for(int i = 0; i < 24; i++) {
-                if(!entries.get(i).get(0).isEdited()) continue;
                 int finalI = i;
                 InputUtil.Key key = ((KeyCodeEntry)entries.get(i).get(0)).getValue().getKeyCode();
                 if(key.getTranslationKey().equals(menuKeybind.getBoundKeyTranslationKey()) ||
