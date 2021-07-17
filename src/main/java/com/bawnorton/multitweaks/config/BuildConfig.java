@@ -54,6 +54,7 @@ public class BuildConfig {
         }
         builder.setSavingRunnable(() -> {
             outer: for(int i = 0; i < 24; i++) {
+                if(!entries.get(i).get(0).isEdited()) continue;
                 int finalI = i;
                 InputUtil.Key key = ((KeyCodeEntry)entries.get(i).get(0)).getValue().getKeyCode();
                 if(key.getTranslationKey().equals(menuKeybind.getBoundKeyTranslationKey()) ||
@@ -66,6 +67,7 @@ public class BuildConfig {
                 for(KeyBinding bind: MinecraftClient.getInstance().options.keysAll) {
                     assert MinecraftClient.getInstance().player != null;
                     if(bind.matchesKey(key.getCode(), key.getCode())) {
+
                         MinecraftClient.getInstance().player.sendMessage(new LiteralText(
                                 "MultiTweaks: Did not register Bind " + (i + 1) + " (" + key.getLocalizedText().getString() + ") <- Conflicting Keybind, Please Re-Bind"), false);
                         continue outer;
