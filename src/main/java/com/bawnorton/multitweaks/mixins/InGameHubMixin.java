@@ -30,8 +30,8 @@ public abstract class InGameHubMixin {
     public void render(MatrixStack matricies, float tickDelta, CallbackInfo ci) {
         if(MultiTweaks.renderChatType) {
             this.scaledHeight = this.client.getWindow().getScaledHeight();
-            int colour = MultiTweaks.currentChat.contains("Global") ? 16777215 : MultiTweaks.currentChat.contains("Kingdom") ? 16755200 : MultiTweaks.currentChat.contains("Visit") ? 11141290 : 43690;
-            DrawableHelper.drawCenteredString(matricies, client.textRenderer, MultiTweaks.currentChat, 38, this.scaledHeight - 30, colour);
+            int colour = MultiTweaks.currentChat.contains("Global") ? 16777215 : MultiTweaks.currentChat.contains("Kingdom") ? 16777045 : MultiTweaks.currentChat.contains("Visit") ? 11141290 : 43690;
+            DrawableHelper.drawCenteredString(matricies, client.textRenderer, MultiTweaks.currentChat,5 + MultiTweaks.currentChat.length(), this.scaledHeight - 30, colour);
         }
     }
 

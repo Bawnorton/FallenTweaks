@@ -24,14 +24,7 @@ public abstract class ChatHudMixin {
         MultiTweaks.renderChatType = false;
         if(this.client.currentScreen instanceof ChatScreen) {
             if(client.player == null) return true;
-            if(client.getServer() != null) {
-                String ip = client.getServer().getServerIp();
-                if(ip != null) {
-                    if(ip.equals("play.fallenkingdom.co")) {
-                        MultiTweaks.renderChatType = true;
-                    }
-                }
-            }
+            MultiTweaks.renderChatType = true;
             return true;
         }
         return false;
