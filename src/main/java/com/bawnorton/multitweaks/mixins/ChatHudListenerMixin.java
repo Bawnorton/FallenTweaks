@@ -4,9 +4,7 @@ import com.bawnorton.multitweaks.MultiTweaks;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.gui.hud.ChatHud;
 import net.minecraft.client.gui.hud.ChatHudListener;
-import net.minecraft.text.LiteralText;
 import net.minecraft.text.Text;
-import org.lwjgl.system.CallbackI;
 import org.spongepowered.asm.mixin.Final;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
@@ -49,9 +47,9 @@ public class ChatHudListenerMixin {
                 MultiTweaks.currentChat = "Visit Chat";
                 break;
             case "Helper Chat: Enabled":
-                if (MultiTweaks.currentChat.equals("Kingdom Chat")) {
+                if (MultiTweaks.currentChat.contains("Kingdom")) {
                     MultiTweaks.currentChat = "Kingdom Chat and Helper Chat";
-                } else if (MultiTweaks.currentChat.equals("Visit Chat")) {
+                } else if (MultiTweaks.currentChat.contains("Visit")) {
                     MultiTweaks.currentChat = "Visit Chat and Helper Chat";
                 }
                 else {

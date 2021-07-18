@@ -5,7 +5,6 @@ import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
-import me.shedaniel.clothconfig2.gui.entries.KeyCodeEntry;
 import net.fabricmc.api.ModInitializer;
 import net.fabricmc.fabric.api.client.event.lifecycle.v1.ClientTickEvents;
 import net.fabricmc.fabric.api.client.keybinding.v1.KeyBindingHelper;
@@ -25,6 +24,7 @@ public class MultiTweaks implements ModInitializer {
     public static final String MOD_ID = "multitweaks";
     public static KeybindSettings[] keybindSettings = new KeybindSettings[24];
     public static String currentChat = "";
+    public static boolean renderChatType = false;
 
     @Override
     public void onInitialize() {

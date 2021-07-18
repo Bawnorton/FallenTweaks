@@ -4,14 +4,13 @@ import com.bawnorton.multitweaks.MultiTweaks;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.gui.hud.ChatHud;
 import net.minecraft.client.gui.screen.ChatScreen;
-import net.minecraft.text.LiteralText;
 import org.spongepowered.asm.mixin.Final;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Overwrite;
 import org.spongepowered.asm.mixin.Shadow;
 
 @Mixin(ChatHud.class)
-public class ChatHudMixin {
+public abstract class ChatHudMixin {
     @Shadow @Final private MinecraftClient client;
 
     /**
@@ -22,9 +21,17 @@ public class ChatHudMixin {
      */
     @Overwrite
     private boolean isChatFocused() {
+        MultiTweaks.renderChatType = false;
         if(this.client.currentScreen instanceof ChatScreen) {
             if(client.player == null) return true;
-            client.player.sendMessage(new LiteralText("You are in " + MultiTweaks.currentChat), true);
+            if(client.getServer() != null) {
+                String ip = client.getServer().getServerIp();
+                if(ip != null) {
+                    if(ip.equals("play.fallenkingdom.co")) {
+                        MultiTweaks.renderChatType = true;
+                    }
+                }
+            }
             return true;
         }
         return false;

@@ -17,6 +17,7 @@ import net.minecraft.client.options.KeyBinding;
 import net.minecraft.client.util.InputUtil;
 import net.minecraft.text.LiteralText;
 import net.minecraft.text.TranslatableText;
+import net.minecraft.util.Identifier;
 
 import java.io.File;
 import java.io.FileWriter;
@@ -104,6 +105,8 @@ public class BuildConfig {
                 e.printStackTrace();
             }
         });
+        builder.setDefaultBackgroundTexture(new Identifier("multitweaks:textures/gui_background.png"));
+        builder.setTransparentBackground(true);
         return builder;
     }
 }
