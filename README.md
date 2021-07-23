@@ -1,6 +1,9 @@
 # Multi Tweaks
 
-Mod that allows you to send text to a server through the press of a key. (24 keybinds)
+Compainion mod to the Fallen Kingdom Server
 
-Allows the scoreboard to be toggled
-
+- Keybinds
+- Sound Management
+- Chat Tracking
+- Toggleable Scoreboard
+- Skin Tweaking (WIP)
