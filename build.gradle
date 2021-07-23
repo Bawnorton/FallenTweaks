@@ -13,6 +13,10 @@ repositories {
 	maven {
 		url = "https://maven.shedaniel.me/"
 	}
+	maven {
+		url = "https://jitpack.io"
+	}
+	mavenCentral()
 }
 
 dependencies {

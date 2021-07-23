@@ -7,8 +7,6 @@ import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 import net.fabricmc.api.ModInitializer;
 import net.fabricmc.fabric.api.client.event.lifecycle.v1.ClientTickEvents;
-import net.fabricmc.fabric.api.client.keybinding.v1.KeyBindingHelper;
-import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.options.KeyBinding;
 import net.minecraft.client.util.InputUtil;
 
@@ -16,15 +14,9 @@ import java.io.*;
 import java.util.Iterator;
 import java.util.Map;
 
-import static com.bawnorton.multitweaks.MultiTweaksClient.textBinds;
-import static com.bawnorton.multitweaks.config.BuildConfig.keyCounts;
+import static com.bawnorton.multitweaks.Global.*;
 
 public class MultiTweaks implements ModInitializer {
-    public static final String NAME = "Multiplayer Tweaks";
-    public static final String MOD_ID = "multitweaks";
-    public static KeybindSettings[] keybindSettings = new KeybindSettings[24];
-    public static String currentChat = "";
-    public static boolean renderChatType = false;
 
     @Override
     public void onInitialize() {
@@ -34,7 +26,7 @@ public class MultiTweaks implements ModInitializer {
         try {
             JsonParser reader = new JsonParser();
             JsonElement element = reader.parse(new FileReader(settingsFile));
-            if(!element.isJsonNull()) {
+            if (!element.isJsonNull()) {
                 jsonObject = (JsonObject) element;
             }
 
@@ -45,10 +37,16 @@ public class MultiTweaks implements ModInitializer {
                 ioException.printStackTrace();
             }
         }
-        if(jsonObject != null && !jsonObject.isJsonNull()) {
-            Iterator<Map.Entry<String, JsonElement>> iterator = jsonObject.entrySet().iterator();
+        if (jsonObject != null && !jsonObject.isJsonNull()) {
+            JsonObject keybindJson;
+            try {
+                keybindJson = jsonObject.get("keybinds").getAsJsonObject();
+            } catch (NullPointerException e) {
+                keybindJson = jsonObject;
+            }
+            Iterator<Map.Entry<String, JsonElement>> iterator = keybindJson.entrySet().iterator();
             int i = 0;
-            while(iterator.hasNext()) {
+            while (iterator.hasNext()) {
                 JsonArray jsonArray = iterator.next().getValue().getAsJsonArray();
                 keybindSettings[i] = new KeybindSettings(
                         InputUtil.fromTranslationKey(jsonArray.get(0).getAsString()), jsonArray.get(1).getAsString()
@@ -56,25 +54,35 @@ public class MultiTweaks implements ModInitializer {
                 if (textBinds[i] != null) {
                     keyCounts[i] = keyCounts[i] + 24;
                 }
-                textBinds[i] = KeyBindingHelper.registerKeyBinding(new KeyBinding(
-                        Integer.toString(keyCounts[i]),
+                textBinds[i] = new KeyBinding(
+                        "Bind " + keyCounts[i] + ":",
                         InputUtil.Type.KEYSYM,
                         keybindSettings[i].key.getCode(),
                         "category.multitweaks.gui"
-                ));
+                );
                 int finalI = i;
                 ClientTickEvents.END_CLIENT_TICK.register(client -> {
-                    while(textBinds[finalI].wasPressed()) {
+                    while (textBinds[finalI].wasPressed()) {
                         String text = keybindSettings[finalI].phrase;
-                        assert MinecraftClient.getInstance().player != null;
-                        MinecraftClient.getInstance().player.sendChatMessage(text);
+                        assert client.player != null;
+                        client.player.sendChatMessage(text);
                     }
                 });
                 i++;
             }
-        }
-        else {
-            for(int i = 0; i < 24; i++) {
+            JsonObject booleanJson;
+            try {
+                booleanJson = jsonObject.get("sounds").getAsJsonObject();
+            } catch (NullPointerException e) {
+                return;
+            }
+            helperDing = booleanJson.get("helperchat").getAsBoolean();
+            kingdomDing = booleanJson.get("kingdomchat").getAsBoolean();
+            visitDing = booleanJson.get("visitchat").getAsBoolean();
+            messageDing = booleanJson.get("messagechat").getAsBoolean();
+            questionDing = booleanJson.get("question").getAsBoolean();
+        } else {
+            for (int i = 0; i < 24; i++) {
                 keybindSettings[i] = new KeybindSettings(InputUtil.UNKNOWN_KEY, "");
             }
         }

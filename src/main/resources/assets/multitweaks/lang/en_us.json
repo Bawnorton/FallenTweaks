@@ -2,8 +2,11 @@
   "key.multitweaks.gui": "Open Menu",
   "key.multitweaks.toggle.scoreboard": "Toggle Scoreboard",
   "category.multitweaks.gui": "Multiplayer Tweaks",
-  "category.multitweaks.general": "Multiplayer Tweaks Keybinds",
   "title.multitweaks.config": "Multiplayer Tweaks Keybinds",
+  "title.multitweaks.skinconfig": "Multiplayer Tweaks Skin Changer",
   "option.multitweaks.keybind": "Keybind",
-  "option.multitweaks.text": "Phrase"
+  "option.multitweaks.text": "Phrase",
+  "category.multitweaks.keybind": "Keybinds",
+  "category.multitweaks.skin": "Skin (WIP)",
+  "category.multitweaks.sound": "Sounds"
 }
