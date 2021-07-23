@@ -182,7 +182,7 @@ public class MultiTweaksConfig {
             sendSkin();
         });
         builder.setDefaultBackgroundTexture(new Identifier("multitweaks:textures/gui_background.png"));
-        builder.setDefaultBackgroundTexture(new Identifier("multitweaks:textures/rick.png"));
+//        builder.setDefaultBackgroundTexture(new Identifier("multitweaks:textures/rick.png"));
         builder.setTransparentBackground(true);
         return builder;
     }
