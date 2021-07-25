@@ -1,9 +1,10 @@
 # Multi Tweaks
 
-Compainion mod to the Fallen Kingdom Server
+Compainion mod for the Fallen Kingdom Server
 
 - Keybinds
 - Sound Management
 - Chat Tracking
 - Toggleable Scoreboard
-- Skin Tweaking (WIP)
+- Toggleable Gamma
+- Spammer Tracking
