@@ -1,6 +1,7 @@
 package com.bawnorton.multitweaks;
 
 import com.bawnorton.multitweaks.config.MultiTweaksConfig;
+import com.bawnorton.multitweaks.skin.SkinManager;
 import net.fabricmc.api.ClientModInitializer;
 import net.fabricmc.fabric.api.client.event.lifecycle.v1.ClientTickEvents;
 import net.fabricmc.fabric.api.client.keybinding.v1.KeyBindingHelper;
@@ -16,6 +17,7 @@ public class MultiTweaksClient implements ClientModInitializer {
 
     public void onInitializeClient() {
         registerKeybinds();
+        SkinManager.saveSession();
     }
 
     private void registerKeybinds() {
@@ -31,6 +33,12 @@ public class MultiTweaksClient implements ClientModInitializer {
                 GLFW.GLFW_KEY_H,
                 "category.multitweaks.gui"
         ));
+        gammaKeybind = KeyBindingHelper.registerKeyBinding(new KeyBinding(
+                "key.multitweaks.toggle.gamma",
+                InputUtil.Type.KEYSYM,
+                GLFW.GLFW_KEY_G,
+                "category.multitweaks.gui"
+        ));
         ClientTickEvents.END_CLIENT_TICK.register(client -> {
             while (menuKeybind.wasPressed()) {
                 Screen screen = MultiTweaksConfig.buildScreen("title.multitweaks.config", client.currentScreen).build();
@@ -42,6 +50,12 @@ public class MultiTweaksClient implements ClientModInitializer {
                 assert client.player != null;
                 client.player.sendMessage(new TranslatableText("Scoreboard was " + (showScoreboard ? "Disabled" : "Enabled")), true);
                 showScoreboard = !showScoreboard;
+            }
+        });
+        ClientTickEvents.END_CLIENT_TICK.register(client -> {
+            while (gammaKeybind.wasPressed()) {
+                if(client.options.gamma > 1) client.options.gamma -= 4;
+                else client.options.gamma += 4;
             }
         });
     }

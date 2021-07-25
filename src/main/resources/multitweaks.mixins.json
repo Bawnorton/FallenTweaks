@@ -12,8 +12,6 @@
   "mixins": [
     "ChatHudListenerMixin",
     "ChatHudMixin",
-    "MinecraftClientMixin",
-    "PlayerEntityRendererMixin",
     "SoundSystemMixin"
   ]
 }

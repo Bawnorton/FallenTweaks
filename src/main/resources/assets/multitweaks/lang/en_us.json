@@ -1,12 +1,13 @@
 {
   "key.multitweaks.gui": "Open Menu",
   "key.multitweaks.toggle.scoreboard": "Toggle Scoreboard",
+  "key.multitweaks.toggle.gamma": "Toggle Gamma",
   "category.multitweaks.gui": "Multiplayer Tweaks",
   "title.multitweaks.config": "Multiplayer Tweaks Keybinds",
   "title.multitweaks.skinconfig": "Multiplayer Tweaks Skin Changer",
   "option.multitweaks.keybind": "Keybind",
   "option.multitweaks.text": "Phrase",
   "category.multitweaks.keybind": "Keybinds",
-  "category.multitweaks.skin": "Skin (WIP)",
-  "category.multitweaks.sound": "Sounds"
+  "category.multitweaks.utility": "Utility",
+  "category.multitweaks.spam": "Spam Record"
 }

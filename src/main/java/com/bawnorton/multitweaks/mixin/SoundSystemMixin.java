@@ -8,7 +8,6 @@ import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
 import static com.bawnorton.multitweaks.Global.*;
-import static com.bawnorton.multitweaks.Global.incomingSound;
 
 @Mixin(SoundSystem.class)
 public class SoundSystemMixin {
@@ -43,6 +42,24 @@ public class SoundSystemMixin {
                         break;
                     case "question":
                         if (!questionDing) {
+                            incomingSound = "";
+                            ci.cancel();
+                        }
+                        break;
+                    case "farm":
+                        if (!farmDing) {
+                            incomingSound = "";
+                            ci.cancel();
+                        }
+                        break;
+                    case "barracks":
+                        if (!barracksDing) {
+                            incomingSound = "";
+                            ci.cancel();
+                        }
+                        break;
+                    case "blacksmith":
+                        if (!blacksmithDing) {
                             incomingSound = "";
                             ci.cancel();
                         }

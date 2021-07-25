@@ -1,14 +1,11 @@
 package com.bawnorton.multitweaks.config;
 
-import com.bawnorton.multitweaks.config.entry.PlayerPreview;
-import com.bawnorton.multitweaks.skin.SkinManager;
 import com.google.gson.Gson;
 import com.google.gson.JsonObject;
 import me.shedaniel.clothconfig2.api.AbstractConfigListEntry;
 import me.shedaniel.clothconfig2.api.ConfigBuilder;
 import me.shedaniel.clothconfig2.api.ConfigCategory;
 import me.shedaniel.clothconfig2.api.ConfigEntryBuilder;
-import me.shedaniel.clothconfig2.gui.entries.IntegerSliderEntry;
 import me.shedaniel.clothconfig2.gui.entries.KeyCodeEntry;
 import net.fabricmc.fabric.api.client.event.lifecycle.v1.ClientTickEvents;
 import net.fabricmc.fabric.api.client.keybinding.v1.KeyBindingHelper;
@@ -17,8 +14,6 @@ import net.minecraft.client.options.KeyBinding;
 import net.minecraft.client.util.InputUtil;
 import net.minecraft.text.LiteralText;
 import net.minecraft.text.TranslatableText;
-import net.minecraft.util.Identifier;
-import org.apache.commons.io.FileUtils;
 
 import java.io.File;
 import java.io.FileWriter;
@@ -27,21 +22,14 @@ import java.util.ArrayList;
 import java.util.List;
 
 import static com.bawnorton.multitweaks.Global.*;
-import static com.bawnorton.multitweaks.skin.SkinManager.sendSkin;
 
 public class MultiTweaksConfig {
-
-    public static IntegerSliderEntry lenienceSlider;
-    public static IntegerSliderEntry redSlider;
-    public static IntegerSliderEntry greenSlider;
-    public static IntegerSliderEntry blueSlider;
-    public static IntegerSliderEntry hueSlider;
 
     public static ConfigBuilder buildScreen(String name, Screen parent) {
         builder = ConfigBuilder.create().setParentScreen(parent).setTitle(new TranslatableText(name));
         ConfigCategory keybindCategory = builder.getOrCreateCategory(new TranslatableText("category.multitweaks.keybind"));
-        ConfigCategory skinCategory = builder.getOrCreateCategory(new TranslatableText("category.multitweaks.skin"));
-        ConfigCategory soundCategory = builder.getOrCreateCategory(new TranslatableText("category.multitweaks.sound"));
+        ConfigCategory utilityCategory = builder.getOrCreateCategory(new TranslatableText("category.multitweaks.utility"));
+        ConfigCategory spamCategory = builder.getOrCreateCategory(new TranslatableText("category.multitweaks.spam"));
         ConfigEntryBuilder entryBuilder = builder.entryBuilder();
         List<List<AbstractConfigListEntry>> entries = new ArrayList<>();
         for (int i = 0; i < 24; i++) {
@@ -60,59 +48,51 @@ public class MultiTweaksConfig {
                             ((KeyCodeEntry) entries.get(i).get(0)).getValue().getKeyCode().getLocalizedText().getString() + " -> " + keybindSettings[finalI].phrase),
                     categories).build());
         }
-        SkinManager.getSkin();
-        PlayerPreview preview = new PlayerPreview();
-        skinCategory.addEntry(preview);
-        lenienceSlider = entryBuilder.startIntSlider(new LiteralText(""), 0, 0, 255)
-                .setDefaultValue(0)
-                .setSaveConsumer(newValue -> lenience = newValue)
-                .setTextGetter((integer) -> new LiteralText(String.format("Lenience: %d", integer)))
-                .build();
-        redSlider = entryBuilder.startIntSlider(new LiteralText(""), 0, 0, 255)
-                .setDefaultValue(0)
-                .setSaveConsumer(newValue -> selectionSlider[0] = newValue)
-                .setTextGetter((integer) -> new LiteralText(String.format("Red: %d", integer)))
-                .build();
-        blueSlider = entryBuilder.startIntSlider(new LiteralText(""), 0, 0, 255)
-                .setDefaultValue(0)
-                .setSaveConsumer(newValue -> selectionSlider[1] = newValue)
-                .setTextGetter((integer) -> new LiteralText(String.format("Green: %d", integer)))
-                .build();
-        greenSlider = entryBuilder.startIntSlider(new LiteralText(""), 0, 0, 255)
-                .setDefaultValue(0)
-                .setSaveConsumer(newValue -> selectionSlider[2] = newValue)
-                .setTextGetter((integer) -> new LiteralText(String.format("Blue: %d", integer)))
-                .build();
-        hueSlider = entryBuilder.startIntSlider(new LiteralText(""), 0, 0, 3600)
-                .setDefaultValue(0)
-                .setSaveConsumer(newValue -> alteredHue = newValue)
-                .setTextGetter((integer) -> new LiteralText("HUE"))
-                .build();
-        skinCategory.addEntry(lenienceSlider);
-        skinCategory.addEntry(redSlider);
-        skinCategory.addEntry(blueSlider);
-        skinCategory.addEntry(greenSlider);
-        skinCategory.addEntry(hueSlider);
-        soundCategory.addEntry(entryBuilder.startBooleanToggle(new TranslatableText("Kingdom Chat"), kingdomDing)
+        utilityCategory.addEntry(entryBuilder.startTextDescription(new LiteralText("Chat Sounds"))
+                .build());
+        utilityCategory.addEntry(entryBuilder.startBooleanToggle(new LiteralText("Kingdom Chat"), kingdomDing)
                 .setDefaultValue(kingdomDing)
                 .setSaveConsumer(newValue -> kingdomDing = newValue)
                 .build());
-        soundCategory.addEntry(entryBuilder.startBooleanToggle(new TranslatableText("Visit Chat"), visitDing)
+        utilityCategory.addEntry(entryBuilder.startBooleanToggle(new LiteralText("Visit Chat"), visitDing)
                 .setDefaultValue(visitDing)
                 .setSaveConsumer(newValue -> visitDing = newValue)
                 .build());
-        soundCategory.addEntry(entryBuilder.startBooleanToggle(new TranslatableText("Helper Chat"), helperDing)
+        utilityCategory.addEntry(entryBuilder.startBooleanToggle(new LiteralText("Helper Chat"), helperDing)
                 .setDefaultValue(helperDing)
                 .setSaveConsumer(newValue -> helperDing = newValue)
                 .build());
-        soundCategory.addEntry(entryBuilder.startBooleanToggle(new TranslatableText("Direct Messages"), messageDing)
+        utilityCategory.addEntry(entryBuilder.startBooleanToggle(new LiteralText("Direct Messages"), messageDing)
                 .setDefaultValue(messageDing)
                 .setSaveConsumer(newValue -> messageDing = newValue)
                 .build());
-        soundCategory.addEntry(entryBuilder.startBooleanToggle(new TranslatableText("Question Words"), questionDing)
+        utilityCategory.addEntry(entryBuilder.startBooleanToggle(new LiteralText("Question Words"), questionDing)
                 .setDefaultValue(questionDing)
                 .setSaveConsumer(newValue -> questionDing = newValue)
                 .build());
+        utilityCategory.addEntry(entryBuilder.startTextDescription(new LiteralText("Kingdom Sounds"))
+                .build());
+        utilityCategory.addEntry(entryBuilder.startBooleanToggle(new LiteralText("Farm"), farmDing)
+                .setDefaultValue(farmDing)
+                .setSaveConsumer(newValue -> farmDing = newValue)
+                .build());
+        utilityCategory.addEntry(entryBuilder.startBooleanToggle(new LiteralText("Barracks"), barracksDing)
+                .setDefaultValue(barracksDing)
+                .setSaveConsumer(newValue -> barracksDing = newValue)
+                .build());
+        utilityCategory.addEntry(entryBuilder.startBooleanToggle(new LiteralText("Blacksmith"), blacksmithDing)
+                .setDefaultValue(blacksmithDing)
+                .setSaveConsumer(newValue -> blacksmithDing = newValue)
+                .build());
+        utilityCategory.addEntry(entryBuilder.startTextDescription(new LiteralText("Automatic"))
+                .build());
+        utilityCategory.addEntry(entryBuilder.startBooleanToggle(new LiteralText("Auto Warn Char Spam"), autoCharSpam)
+                .setDefaultValue(autoCharSpam)
+                .setSaveConsumer(newValue -> autoCharSpam = newValue)
+                .build());
+        for(String s: spammers.keySet()) {
+            spamCategory.addEntry(entryBuilder.startTextDescription(new LiteralText(s + ": " + spammers.get(s))).build());
+        }
         builder.setSavingRunnable(() -> {
             outer:
             for (int i = 0; i < 24; i++) {
@@ -167,22 +147,23 @@ public class MultiTweaksConfig {
                 booleanJson.add("visitchat", gson.toJsonTree(visitDing));
                 booleanJson.add("messagechat", gson.toJsonTree(messageDing));
                 booleanJson.add("question", gson.toJsonTree(questionDing));
+                booleanJson.add("farm", gson.toJsonTree(farmDing));
+                booleanJson.add("barracks", gson.toJsonTree(barracksDing));
+                booleanJson.add("blacksmith", gson.toJsonTree(blacksmithDing));
+                booleanJson.add("charspam", gson.toJsonTree(autoCharSpam));
+                JsonObject spammerJson = new JsonObject();
+                for(String s: spammers.keySet()) {
+                    spammerJson.add(s, gson.toJsonTree(spammers.get(s)));
+                }
                 json.add("keybinds", keybindJson);
-                json.add("sounds", booleanJson);
+                json.add("utility", booleanJson);
+                json.add("spammers", spammerJson);
                 file.write(json.toString());
                 file.close();
             } catch (IOException e) {
                 e.printStackTrace();
             }
-            try {
-                FileUtils.copyFile(skinPNGFile, storedFile);
-            } catch (NullPointerException | IOException e) {
-                System.out.println("Cannot Save Skin, No Skin File");
-            }
-            sendSkin();
         });
-        builder.setDefaultBackgroundTexture(new Identifier("multitweaks:textures/gui_background.png"));
-//        builder.setDefaultBackgroundTexture(new Identifier("multitweaks:textures/rick.png"));
         builder.setTransparentBackground(true);
         return builder;
     }

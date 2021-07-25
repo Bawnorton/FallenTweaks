@@ -70,17 +70,26 @@ public class MultiTweaks implements ModInitializer {
                 });
                 i++;
             }
-            JsonObject booleanJson;
             try {
-                booleanJson = jsonObject.get("sounds").getAsJsonObject();
+                JsonObject booleanJson = jsonObject.get("utility").getAsJsonObject();
+                helperDing = booleanJson.get("helperchat").getAsBoolean();
+                kingdomDing = booleanJson.get("kingdomchat").getAsBoolean();
+                visitDing = booleanJson.get("visitchat").getAsBoolean();
+                messageDing = booleanJson.get("messagechat").getAsBoolean();
+                questionDing = booleanJson.get("question").getAsBoolean();
+                autoCharSpam = booleanJson.get("charspam").getAsBoolean();
+                farmDing = booleanJson.get("farm").getAsBoolean();
+                barracksDing = booleanJson.get("barracks").getAsBoolean();
+                blacksmithDing = booleanJson.get("blacksmith").getAsBoolean();
             } catch (NullPointerException e) {
                 return;
             }
-            helperDing = booleanJson.get("helperchat").getAsBoolean();
-            kingdomDing = booleanJson.get("kingdomchat").getAsBoolean();
-            visitDing = booleanJson.get("visitchat").getAsBoolean();
-            messageDing = booleanJson.get("messagechat").getAsBoolean();
-            questionDing = booleanJson.get("question").getAsBoolean();
+            try {
+                JsonObject spammerJson = jsonObject.get("spammers").getAsJsonObject();
+                for(Map.Entry<String, JsonElement> element: spammerJson.entrySet()) {
+                    spammers.put(element.getKey(), element.getValue().getAsInt());
+                }
+            } catch (NullPointerException ignored) {}
         } else {
             for (int i = 0; i < 24; i++) {
                 keybindSettings[i] = new KeybindSettings(InputUtil.UNKNOWN_KEY, "");
