@@ -12,6 +12,7 @@
   "mixins": [
     "ChatHudListenerMixin",
     "ChatHudMixin",
-    "SoundSystemMixin"
+    "SoundSystemMixin",
+    "ConnectScreenMixin"
   ]
 }

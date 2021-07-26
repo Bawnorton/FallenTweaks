@@ -1,7 +1,6 @@
 package com.bawnorton.multitweaks.config;
 
-import com.google.gson.Gson;
-import com.google.gson.JsonObject;
+import com.google.gson.*;
 import me.shedaniel.clothconfig2.api.AbstractConfigListEntry;
 import me.shedaniel.clothconfig2.api.ConfigBuilder;
 import me.shedaniel.clothconfig2.api.ConfigCategory;
@@ -15,17 +14,15 @@ import net.minecraft.client.util.InputUtil;
 import net.minecraft.text.LiteralText;
 import net.minecraft.text.TranslatableText;
 
-import java.io.File;
-import java.io.FileWriter;
-import java.io.IOException;
-import java.util.ArrayList;
-import java.util.List;
+import java.io.*;
+import java.util.*;
 
 import static com.bawnorton.multitweaks.Global.*;
 
 public class MultiTweaksConfig {
 
     public static ConfigBuilder buildScreen(String name, Screen parent) {
+        loadConfig();
         builder = ConfigBuilder.create().setParentScreen(parent).setTitle(new TranslatableText(name));
         ConfigCategory keybindCategory = builder.getOrCreateCategory(new TranslatableText("category.multitweaks.keybind"));
         ConfigCategory utilityCategory = builder.getOrCreateCategory(new TranslatableText("category.multitweaks.utility"));
@@ -134,9 +131,11 @@ public class MultiTweaksConfig {
             }
             File settingsFile = new File("config", "multitweaks.json");
             try {
+                JsonObject jsonObject = new JsonParser().parse(new FileReader(settingsFile)).getAsJsonObject();
+                Set<Map.Entry<String, JsonElement>> jsonEntries = jsonObject.entrySet();
                 FileWriter file = new FileWriter(settingsFile);
                 JsonObject keybindJson = new JsonObject();
-                JsonObject json = new JsonObject();
+                JsonObject serverJson = new JsonObject();
                 Gson gson = new Gson();
                 for (int i = 0; i < keybindSettings.length; i++) {
                     keybindJson.add(Integer.toString(i), gson.toJsonTree(new String[]{keybindSettings[i].key.getTranslationKey(), keybindSettings[i].phrase}));
@@ -155,9 +154,14 @@ public class MultiTweaksConfig {
                 for(String s: spammers.keySet()) {
                     spammerJson.add(s, gson.toJsonTree(spammers.get(s)));
                 }
-                json.add("keybinds", keybindJson);
-                json.add("utility", booleanJson);
-                json.add("spammers", spammerJson);
+                serverJson.add("keybinds", keybindJson);
+                serverJson.add("utility", booleanJson);
+                serverJson.add("spammers", spammerJson);
+                JsonObject json = new JsonObject();
+                json.add(ipAddress, serverJson);
+                for(Map.Entry<String, JsonElement> entry: jsonEntries) {
+                    json.add(entry.getKey(), entry.getValue());
+                }
                 file.write(json.toString());
                 file.close();
             } catch (IOException e) {
@@ -166,5 +170,91 @@ public class MultiTweaksConfig {
         });
         builder.setTransparentBackground(true);
         return builder;
+    }
+    private static void loadConfig() {
+        File settingsFile = new File("config", "multitweaks.json");
+        JsonObject jsonObject = null;
+        try {
+            JsonParser reader = new JsonParser();
+            JsonElement element = reader.parse(new FileReader(settingsFile));
+            if (!element.isJsonNull()) {
+                jsonObject = (JsonObject) element;
+            }
+
+        } catch (FileNotFoundException e) {
+            try {
+                new FileWriter(settingsFile.getPath());
+            } catch (IOException ioException) {
+                ioException.printStackTrace();
+            }
+        }
+        if (jsonObject != null && !jsonObject.isJsonNull()) {
+            JsonObject serverJson;
+            try {
+                serverJson = jsonObject.get(ipAddress).getAsJsonObject();
+            } catch (NullPointerException e) {
+                serverJson = new JsonObject();
+                serverJson.add(ipAddress, null);
+            }
+            JsonObject keybindJson;
+            try {
+                keybindJson = serverJson.get("keybinds").getAsJsonObject();
+            } catch (NullPointerException e) {
+                keybindJson = new JsonObject();
+                for (int i = 0; i < 24; i++) {
+                    keybindSettings[i] = new KeybindSettings(InputUtil.UNKNOWN_KEY, "");
+                }
+            }
+            Iterator<Map.Entry<String, JsonElement>> iterator = keybindJson.entrySet().iterator();
+            int i = 0;
+            while (iterator.hasNext()) {
+                JsonArray jsonArray = iterator.next().getValue().getAsJsonArray();
+                keybindSettings[i] = new KeybindSettings(
+                        InputUtil.fromTranslationKey(jsonArray.get(0).getAsString()), jsonArray.get(1).getAsString()
+                );
+                if (textBinds[i] != null) {
+                    keyCounts[i] = keyCounts[i] + 24;
+                }
+                textBinds[i] = new KeyBinding(
+                        "Bind " + keyCounts[i] + ":",
+                        InputUtil.Type.KEYSYM,
+                        keybindSettings[i].key.getCode(),
+                        "category.multitweaks.gui"
+                );
+                int finalI = i;
+                ClientTickEvents.END_CLIENT_TICK.register(client -> {
+                    while (textBinds[finalI].wasPressed()) {
+                        String text = keybindSettings[finalI].phrase;
+                        assert client.player != null;
+                        client.player.sendChatMessage(text);
+                    }
+                });
+                i++;
+            }
+            try {
+                JsonObject booleanJson = jsonObject.get("utility").getAsJsonObject();
+                helperDing = booleanJson.get("helperchat").getAsBoolean();
+                kingdomDing = booleanJson.get("kingdomchat").getAsBoolean();
+                visitDing = booleanJson.get("visitchat").getAsBoolean();
+                messageDing = booleanJson.get("messagechat").getAsBoolean();
+                questionDing = booleanJson.get("question").getAsBoolean();
+                autoCharSpam = booleanJson.get("charspam").getAsBoolean();
+                farmDing = booleanJson.get("farm").getAsBoolean();
+                barracksDing = booleanJson.get("barracks").getAsBoolean();
+                blacksmithDing = booleanJson.get("blacksmith").getAsBoolean();
+            } catch (NullPointerException e) {
+                return;
+            }
+            try {
+                JsonObject spammerJson = jsonObject.get("spammers").getAsJsonObject();
+                for(Map.Entry<String, JsonElement> element: spammerJson.entrySet()) {
+                    spammers.put(element.getKey(), element.getValue().getAsInt());
+                }
+            } catch (NullPointerException ignored) {}
+        } else {
+            for (int i = 0; i < 24; i++) {
+                keybindSettings[i] = new KeybindSettings(InputUtil.UNKNOWN_KEY, "");
+            }
+        }
     }
 }

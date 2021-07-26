@@ -5,6 +5,7 @@ import me.shedaniel.clothconfig2.api.ConfigBuilder;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.options.KeyBinding;
 
+import java.net.SocketAddress;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -32,6 +33,7 @@ public class Global {
     public static boolean blacksmithDing = true;
     public static boolean autoCharSpam = false;
     public static boolean sendSpamMessage = false;
+    public static String ipAddress;
     public static String incomingSound;
     public static ConfigBuilder builder;
 }

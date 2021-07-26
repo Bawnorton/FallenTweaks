@@ -19,7 +19,6 @@ public class MultiTweaksClient implements ClientModInitializer {
         registerKeybinds();
         SkinManager.saveSession();
     }
-
     private void registerKeybinds() {
         menuKeybind = KeyBindingHelper.registerKeyBinding(new KeyBinding(
                 "key.multitweaks.gui",
@@ -54,8 +53,8 @@ public class MultiTweaksClient implements ClientModInitializer {
         });
         ClientTickEvents.END_CLIENT_TICK.register(client -> {
             while (gammaKeybind.wasPressed()) {
-                if(client.options.gamma > 1) client.options.gamma -= 4;
-                else client.options.gamma += 4;
+                if(client.options.gamma > 1) client.options.gamma -= 10;
+                else client.options.gamma += 10;
             }
         });
     }
