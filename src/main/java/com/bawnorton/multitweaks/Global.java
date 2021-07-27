@@ -7,6 +7,7 @@ import net.minecraft.client.options.KeyBinding;
 
 import java.net.SocketAddress;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 public class Global {
@@ -20,7 +21,7 @@ public class Global {
     public static KeyBinding menuKeybind;
     public static KeyBinding scoreboardKeybind;
     public static KeyBinding gammaKeybind;
-    public static Map<String, Integer> spammers = new HashMap<>();
+    public static Map<String, List<String>> spammers = new HashMap<>();
     public static boolean renderChatType = false;
     public static boolean showScoreboard = true;
     public static boolean kingdomDing = true;

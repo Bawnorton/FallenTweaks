@@ -11,6 +11,11 @@ import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Redirect;
 
+import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.List;
+
 import static com.bawnorton.multitweaks.Global.*;
 
 
@@ -82,7 +87,7 @@ public class ChatHudListenerMixin {
             incomingSound = "kingdomchat";
         } else if (messageText.startsWith("VISITATION")) {
             incomingSound = "visitchat";
-        } else if (messageText.startsWith("From") || messageText.startsWith("To")) {
+        } else if (messageText.startsWith("From ") || messageText.startsWith("To ")) {
             incomingSound = "messagechat";
             client.player.playSound(SoundEvents.BLOCK_NOTE_BLOCK_BELL, 1.0F, 0.5F);
         } else if (messageText.contains("where") || messageText.contains("how") || messageText.contains("when") || messageText.contains("why") || messageText.contains("what") || messageText.contains("?")) {
@@ -95,6 +100,7 @@ public class ChatHudListenerMixin {
         } else if (messageText.startsWith("Jerry")) {
             incomingSound = "blacksmith";
         }
+        client.inGameHud.getChatHud().addMessage(message);
         boolean charSpam = containsSpam(messageText);
         outer: if(charSpam) {
             if(autoCharSpam) {
@@ -119,14 +125,23 @@ public class ChatHudListenerMixin {
                         break;
                 }
             }
-            String playerName = messageText.substring(messageText.substring(0, messageText.indexOf(":")).lastIndexOf(" ") + 1);
+            if(!messageText.contains(":")) return;
+            String spamMessage = messageText.substring(messageText.indexOf(":") + 1);
+            String playerIdentity = messageText.substring(0, messageText.indexOf(":"));
+            String playerName = playerIdentity.substring(playerIdentity.lastIndexOf(" "));
+            String date = java.time.LocalDate.now().toString();
+            String time = java.time.LocalTime.now().toString();
+            String item = date + " " + time + ": " + spamMessage;
             if(spammers.containsKey(playerName)) {
-                spammers.replace(playerName, spammers.get(playerName) + 1);
+                List<String> messages = spammers.get(playerName);
+                messages.add(item);
+                spammers.replace(playerName, messages);
             } else {
-                spammers.put(playerName, 1);
+                List<String> messages =  new ArrayList<>();
+                messages.add(item);
+                spammers.put(playerName, messages);
             }
         }
-        client.inGameHud.getChatHud().addMessage(message);
     }
     private boolean containsSpam(String messageText) {
         char previous = ' ';
