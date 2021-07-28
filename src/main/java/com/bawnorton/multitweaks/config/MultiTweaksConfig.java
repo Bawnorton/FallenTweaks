@@ -1,5 +1,6 @@
 package com.bawnorton.multitweaks.config;
 
+import com.bawnorton.multitweaks.MultiTweaksClient;
 import com.google.gson.*;
 import me.shedaniel.clothconfig2.api.AbstractConfigListEntry;
 import me.shedaniel.clothconfig2.api.ConfigBuilder;
@@ -97,18 +98,10 @@ public class MultiTweaksConfig {
             }
         }
         builder.setSavingRunnable(() -> {
-            outer:
-            for (int i = 0; i < 24; i++) {
+            outer: for (int i = 0; i < 24; i++) {
                 if (!entries.get(i).get(0).isEdited()) continue;
                 int finalI = i;
                 InputUtil.Key key = ((KeyCodeEntry) entries.get(i).get(0)).getValue().getKeyCode();
-                if (key.getTranslationKey().equals(menuKeybind.getBoundKeyTranslationKey()) ||
-                        key.getTranslationKey().equals(scoreboardKeybind.getBoundKeyTranslationKey())) {
-                    assert client.player != null;
-                    client.player.sendMessage(new LiteralText(
-                            "MultiTweaks: Did not register Bind " + (i + 1) + " (" + key.getLocalizedText().getString() + ") <- Conflicting Keybind, Please Re-Bind"), false);
-                    continue;
-                }
                 for (KeyBinding bind : client.options.keysAll) {
                     assert client.player != null;
                     if (bind.matchesKey(key.getCode(), key.getCode())) {
@@ -135,43 +128,8 @@ public class MultiTweaksConfig {
                     }
                 });
             }
-            File settingsFile = new File("config", "multitweaks.json");
             try {
-                JsonObject jsonObject = new JsonParser().parse(new FileReader(settingsFile)).getAsJsonObject();
-                Set<Map.Entry<String, JsonElement>> jsonEntries = jsonObject.entrySet();
-                FileWriter file = new FileWriter(settingsFile);
-                JsonObject keybindJson = new JsonObject();
-                JsonObject serverJson = new JsonObject();
-                Gson gson = new Gson();
-                for (int i = 0; i < keybindSettings.length; i++) {
-                    keybindJson.add(Integer.toString(i), gson.toJsonTree(new String[]{keybindSettings[i].key.getTranslationKey(), keybindSettings[i].phrase}));
-                }
-                serverJson.add("keybinds", keybindJson);
-                if(ipAddress.contains("fallenkingdom")) {
-                    JsonObject booleanJson = new JsonObject();
-                    booleanJson.add("helperchat", gson.toJsonTree(helperDing));
-                    booleanJson.add("kingdomchat", gson.toJsonTree(kingdomDing));
-                    booleanJson.add("visitchat", gson.toJsonTree(visitDing));
-                    booleanJson.add("messagechat", gson.toJsonTree(messageDing));
-                    booleanJson.add("question", gson.toJsonTree(questionDing));
-                    booleanJson.add("charspam", gson.toJsonTree(autoCharSpam));
-                    booleanJson.add("farm", gson.toJsonTree(farmDing));
-                    booleanJson.add("barracks", gson.toJsonTree(barracksDing));
-                    booleanJson.add("blacksmith", gson.toJsonTree(blacksmithDing));
-                    JsonObject spammerJson = new JsonObject();
-                    for(String s: spammers.keySet()) {
-                        spammerJson.add(s, gson.toJsonTree(spammers.get(s)).getAsJsonArray());
-                    }
-                    serverJson.add("utility", booleanJson);
-                    serverJson.add("spammers", spammerJson);
-                }
-                JsonObject json = new JsonObject();
-                for(Map.Entry<String, JsonElement> entry: jsonEntries) {
-                    json.add(entry.getKey(), entry.getValue());
-                }
-                json.add(ipAddress, serverJson);
-                file.write(json.toString());
-                file.close();
+                MultiTweaksClient.saveConfig();
             } catch (IOException e) {
                 e.printStackTrace();
             }

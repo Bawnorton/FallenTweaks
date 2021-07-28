@@ -13,6 +13,8 @@
     "ChatHudListenerMixin",
     "ChatHudMixin",
     "SoundSystemMixin",
-    "ConnectScreenMixin"
+    "ConnectScreenMixin",
+    "PlayerEntityMixin",
+    "MinecraftClientMixin"
   ]
 }

@@ -28,6 +28,8 @@ public class ChatHudListenerMixin {
 
     @Redirect(method = "onChatMessage", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/gui/hud/ChatHud;addMessage(Lnet/minecraft/text/Text;)V"))
     public void updateChat(ChatHud chatHud, Text message) {
+        client.inGameHud.getChatHud().addMessage(message);
+        if(!ipAddress.contains("fallenkingdom")) return;
         String messageText = message.getString();
         assert client.player != null;
         switch (messageText) {
@@ -100,11 +102,10 @@ public class ChatHudListenerMixin {
         } else if (messageText.startsWith("Jerry")) {
             incomingSound = "blacksmith";
         }
-        client.inGameHud.getChatHud().addMessage(message);
         boolean charSpam = containsSpam(messageText);
         outer: if(charSpam) {
+            if(messageText.contains(client.player.getEntityName()) || messageText.startsWith("KINGDOM") || messageText.startsWith("VISITATION") || messageText.startsWith("HELPER")) break outer;
             if(autoCharSpam) {
-                if(messageText.contains(client.player.getEntityName()) || messageText.startsWith("KINGDOM") || messageText.startsWith("VISITATION") || messageText.startsWith("HELPER")) break outer;
                 switch (currentChat) {
                     case "Kingdom Chat":
                         client.player.sendChatMessage("/k c");
@@ -125,7 +126,6 @@ public class ChatHudListenerMixin {
                         break;
                 }
             }
-            if(!messageText.contains(":")) return;
             String spamMessage = messageText.substring(messageText.indexOf(":") + 1);
             String playerIdentity = messageText.substring(0, messageText.indexOf(":"));
             String playerName = playerIdentity.substring(playerIdentity.lastIndexOf(" "));

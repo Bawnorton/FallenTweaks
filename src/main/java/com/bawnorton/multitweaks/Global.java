@@ -14,6 +14,8 @@ public class Global {
     public static final String NAME = "Multiplayer Tweaks";
     public static final String MOD_ID = "multitweaks";
     public static final int[] keyCounts = {0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23};
+    public static int cycleHat = 0;
+    public static int persistentHat = 0;
     public static String currentChat = "";
     public static KeybindSettings[] keybindSettings = new KeybindSettings[24];
     public static KeyBinding[] textBinds = new KeyBinding[24];
@@ -21,6 +23,7 @@ public class Global {
     public static KeyBinding menuKeybind;
     public static KeyBinding scoreboardKeybind;
     public static KeyBinding gammaKeybind;
+    public static KeyBinding hatKeybind;
     public static Map<String, List<String>> spammers = new HashMap<>();
     public static boolean renderChatType = false;
     public static boolean showScoreboard = true;
