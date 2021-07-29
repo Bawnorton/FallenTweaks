@@ -144,6 +144,7 @@ public class ChatHudListenerMixin {
         }
     }
     private boolean containsSpam(String messageText) {
+        if(!messageText.contains(":")) return false;
         char previous = ' ';
         int count = 1;
         for(char c: messageText.toCharArray()) {

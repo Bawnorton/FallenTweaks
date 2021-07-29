@@ -25,31 +25,7 @@ public abstract class PlayerEntityMixin {
     @Inject(method = "tick", at = @At("HEAD"))
     public void renderCrown(CallbackInfo ci) {
         if(ipAddress.contains("fallenkingdom")) {
-            if(this.getDisplayName().getString().contains("curmor") && !client.player.getDisplayName().getString().contains("curmor")) {
-                if(this.getEquippedStack(EquipmentSlot.HEAD) == ItemStack.EMPTY) {
-                    ItemStack pickaxeStack = new ItemStack(Items.GOLDEN_PICKAXE);
-                    CompoundTag tag = new CompoundTag();
-                    tag.putInt("CustomModelData", 3);
-                    pickaxeStack.setTag(tag);
-                    this.equipStack(EquipmentSlot.HEAD, pickaxeStack);
-                }
-                if(this.getEquippedStack(EquipmentSlot.CHEST) == ItemStack.EMPTY) {
-                    ItemStack itemStack = new ItemStack(Items.NETHERITE_CHESTPLATE);
-                    this.equipStack(EquipmentSlot.CHEST, itemStack);
-                }
-                if(this.getEquippedStack(EquipmentSlot.LEGS) == ItemStack.EMPTY) {
-                    ItemStack itemStack = new ItemStack(Items.NETHERITE_LEGGINGS);
-                    this.equipStack(EquipmentSlot.LEGS, itemStack);
-                }
-                if(this.getEquippedStack(EquipmentSlot.FEET) == ItemStack.EMPTY) {
-                    ItemStack itemStack = new ItemStack(Items.NETHERITE_BOOTS);
-                    this.equipStack(EquipmentSlot.FEET, itemStack);
-                }
-                if(this.getEquippedStack(EquipmentSlot.MAINHAND) == ItemStack.EMPTY) {
-                    ItemStack itemStack = new ItemStack(Items.NETHERITE_SWORD);
-                    this.equipStack(EquipmentSlot.MAINHAND, itemStack);
-                }
-            } else if (this.getDisplayName().getString().contains(client.player.getDisplayName().getString())) {
+            if (this.getDisplayName().getString().contains(client.player.getDisplayName().getString())) {
                 if(cycleHat != 0) {
                     if(this.getEquippedStack(EquipmentSlot.HEAD) == ItemStack.EMPTY || persistentHat != cycleHat) {
                         ItemStack pickaxeStack = new ItemStack(Items.GOLDEN_PICKAXE);
@@ -60,7 +36,7 @@ public abstract class PlayerEntityMixin {
                         this.equipStack(EquipmentSlot.HEAD, pickaxeStack);
                     }
                 } else {
-                    if(this.getEquippedStack(EquipmentSlot.HEAD) != ItemStack.EMPTY) {
+                    if(this.getEquippedStack(EquipmentSlot.HEAD).equals(new ItemStack(Items.GOLDEN_PICKAXE))) {
                         this.equipStack(EquipmentSlot.HEAD, ItemStack.EMPTY);
                     }
                 }
