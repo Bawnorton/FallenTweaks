@@ -83,12 +83,15 @@ public abstract class ChatHudMixin {
         }
         if (betterFarm) {
             String maxStorage = "(.*)Your bank’s vault has reached its max capacity for (.*) Please upgrade your bank or spend some of your resources before you try again\\.";
+            String noHarvest = "(.*)There is nothing to be harvested\\.";
             if (messageString.matches(maxStorage)) {
                 String replacement = "§7Reached max capacity for §9" + messageString.substring(messageString.indexOf("for") + 4, messageString.indexOf(" Please"));
                 LiteralText replacementText = new LiteralText(replacement);
                 removeLastMessage(replacementText, replacement);
                 this.addMessage(replacementText);
                 callbackInfo.cancel();
+            } else if (messageString.matches(noHarvest)) {
+                removeLastMessage(message, noHarvest);
             }
         }
         if (betterTroops) {
