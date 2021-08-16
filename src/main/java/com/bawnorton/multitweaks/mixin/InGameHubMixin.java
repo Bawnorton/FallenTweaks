@@ -24,6 +24,8 @@ public abstract class InGameHubMixin {
     private MinecraftClient client;
     @Shadow
     private int scaledHeight;
+    @Shadow
+    private int scaledWidth;
 
     @Shadow
     protected abstract void renderScoreboardSidebar(MatrixStack matrices, ScoreboardObjective objective);
@@ -34,6 +36,15 @@ public abstract class InGameHubMixin {
             this.scaledHeight = this.client.getWindow().getScaledHeight();
             int colour = currentChat.contains("Global") ? 16777215 : currentChat.contains("Kingdom") ? 16777045 : currentChat.contains("Visit") ? 11141290 : 43690;
             DrawableHelper.drawCenteredString(matricies, client.textRenderer, currentChat, currentChat.length() * 3, this.scaledHeight - 30, colour);
+        }
+        if (renderBarracksTime) {
+            this.scaledHeight = this.client.getWindow().getScaledHeight();
+            this.scaledWidth = this.client.getWindow().getScaledWidth();
+            int colour = 16733525;
+            double minutes = (double) Math.round(((trainTime % 3600) / 60 * 100) * 10) / 100;
+            double seconds = (double) Math.round(((trainTime % 60) / 60 * 100) * 10) / 100;
+            double time = (int) (minutes + seconds) / 10.0;
+            DrawableHelper.drawCenteredString(matricies, client.textRenderer, "Barracks Train Time: " + time + " min(s)", this.scaledWidth - 90, this.scaledHeight - 30, colour);
         }
     }
 

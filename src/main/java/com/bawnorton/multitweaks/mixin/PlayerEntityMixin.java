@@ -16,18 +16,22 @@ import static com.bawnorton.multitweaks.Global.*;
 
 @Mixin(PlayerEntity.class)
 public abstract class PlayerEntityMixin {
-    @Shadow public abstract void equipStack(EquipmentSlot slot, ItemStack stack);
+    @Shadow
+    public abstract void equipStack(EquipmentSlot slot, ItemStack stack);
 
-    @Shadow public abstract ItemStack getEquippedStack(EquipmentSlot slot);
+    @Shadow
+    public abstract ItemStack getEquippedStack(EquipmentSlot slot);
 
-    @Shadow public abstract Text getDisplayName();
+    @Shadow
+    public abstract Text getDisplayName();
 
     @Inject(method = "tick", at = @At("HEAD"))
     public void renderCrown(CallbackInfo ci) {
-        if(ipAddress.contains("fallenkingdom")) {
+        if (ipAddress.contains("fallenkingdom")) {
+            assert client.player != null;
             if (this.getDisplayName().getString().contains(client.player.getDisplayName().getString())) {
-                if(cycleHat != 0) {
-                    if(this.getEquippedStack(EquipmentSlot.HEAD) == ItemStack.EMPTY || persistentHat != cycleHat) {
+                if (cycleHat != 0) {
+                    if (this.getEquippedStack(EquipmentSlot.HEAD) == ItemStack.EMPTY || persistentHat != cycleHat) {
                         ItemStack pickaxeStack = new ItemStack(Items.GOLDEN_PICKAXE);
                         CompoundTag tag = new CompoundTag();
                         tag.putInt("CustomModelData", cycleHat);
@@ -36,7 +40,7 @@ public abstract class PlayerEntityMixin {
                         this.equipStack(EquipmentSlot.HEAD, pickaxeStack);
                     }
                 } else {
-                    if(this.getEquippedStack(EquipmentSlot.HEAD).equals(new ItemStack(Items.GOLDEN_PICKAXE))) {
+                    if (this.getEquippedStack(EquipmentSlot.HEAD).equals(new ItemStack(Items.GOLDEN_PICKAXE))) {
                         this.equipStack(EquipmentSlot.HEAD, ItemStack.EMPTY);
                     }
                 }

@@ -14,7 +14,7 @@ public class SoundSystemMixin {
     @Inject(method = "play(Lnet/minecraft/client/sound/SoundInstance;)V", at = @At("HEAD"), cancellable = true)
     public void stopSound(SoundInstance soundInstance, CallbackInfo ci) {
         try {
-            if(!incomingSound.equals("")) {
+            if (!incomingSound.equals("")) {
                 switch (incomingSound) {
                     case "helperchat":
                         if (!helperDing) {
@@ -30,6 +30,12 @@ public class SoundSystemMixin {
                         break;
                     case "visitchat":
                         if (!visitDing) {
+                            incomingSound = "";
+                            ci.cancel();
+                        }
+                        break;
+                    case "staffchat":
+                        if (!staffDing) {
                             incomingSound = "";
                             ci.cancel();
                         }
@@ -68,6 +74,7 @@ public class SoundSystemMixin {
                         break;
                 }
             }
-        } catch (NullPointerException ignored) {}
+        } catch (NullPointerException ignored) {
+        }
     }
 }

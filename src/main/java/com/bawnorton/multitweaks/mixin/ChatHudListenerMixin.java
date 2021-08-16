@@ -11,9 +11,7 @@ import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Redirect;
 
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 
 import static com.bawnorton.multitweaks.Global.*;
@@ -29,7 +27,7 @@ public class ChatHudListenerMixin {
     @Redirect(method = "onChatMessage", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/gui/hud/ChatHud;addMessage(Lnet/minecraft/text/Text;)V"))
     public void updateChat(ChatHud chatHud, Text message) {
         client.inGameHud.getChatHud().addMessage(message);
-        if(!ipAddress.contains("fallenkingdom")) return;
+        if (!ipAddress.contains("fallenkingdom")) return;
         String messageText = message.getString();
         assert client.player != null;
         switch (messageText) {
@@ -40,9 +38,10 @@ public class ChatHudListenerMixin {
                     currentChat = "Kingdom Chat";
                 }
                 break;
+            case "Staff Chat: Disabled":
             case "Kingdom Chat: Disabled":
             case "Visitation Chat: Disabled":
-                if(sendSpamMessage) {
+                if (sendSpamMessage) {
                     client.player.sendChatMessage("Please don't character spam");
                     sendSpamMessage = false;
                 }
@@ -53,11 +52,11 @@ public class ChatHudListenerMixin {
                 }
                 break;
             case "Helper Chat: Disabled":
-                if(sendSpamMessage) {
+                if (sendSpamMessage) {
                     client.player.sendChatMessage("Please don't character spam");
                     sendSpamMessage = false;
                 }
-                if (currentChat.contains("Kingodm")) {
+                if (currentChat.contains("Kingdom")) {
                     currentChat = "Kingdom Chat";
                 } else if (currentChat.contains("Visit")) {
                     currentChat = "Visit Chat";
@@ -81,14 +80,20 @@ public class ChatHudListenerMixin {
                     currentChat = "Helper Chat";
                 }
                 break;
+            case "Staff Chat: Enabled":
+                currentChat = "Staff Chat";
+                break;
+
         }
-        if(messageText.startsWith("HELPER") && !(messageText.contains("participating") || messageText.contains("joined the network") || messageText.contains("left the network") || messageText.contains("joined the lobby"))) {
+        if (messageText.startsWith("HELPER") && !(messageText.contains("participating") || messageText.contains("joined the network") || messageText.contains("left the network") || messageText.contains("joined the lobby"))) {
             incomingSound = "helperchat";
             client.player.playSound(SoundEvents.BLOCK_NOTE_BLOCK_BELL, 1.0F, 0.5F);
         } else if (messageText.startsWith("KINGDOM")) {
             incomingSound = "kingdomchat";
         } else if (messageText.startsWith("VISITATION")) {
             incomingSound = "visitchat";
+        } else if (messageText.startsWith("STAFF")) {
+            incomingSound = "staffchat";
         } else if (messageText.startsWith("From ") || messageText.startsWith("To ")) {
             incomingSound = "messagechat";
             client.player.playSound(SoundEvents.BLOCK_NOTE_BLOCK_BELL, 1.0F, 0.5F);
@@ -102,10 +107,18 @@ public class ChatHudListenerMixin {
         } else if (messageText.startsWith("Jerry")) {
             incomingSound = "blacksmith";
         }
+
+        if (messageText.matches("(.*)Started training of your (.*)! You have (.*) spaces left!")) {
+            String troopName = messageText.substring(messageText.indexOf("your") + 5, messageText.indexOf("!"));
+            trainTime += troopTimes.get(troopName);
+        }
+
         boolean charSpam = containsSpam(messageText);
-        outer: if(charSpam) {
-            if(messageText.contains(client.player.getEntityName()) || messageText.startsWith("KINGDOM") || messageText.startsWith("VISITATION") || messageText.startsWith("HELPER")) break outer;
-            if(autoCharSpam) {
+        outer:
+        if (charSpam) {
+            if (messageText.contains(client.player.getEntityName()) || messageText.startsWith("KINGDOM") || messageText.startsWith("VISITATION") || messageText.startsWith("HELPER"))
+                break outer;
+            if (autoCharSpam) {
                 switch (currentChat) {
                     case "Kingdom Chat":
                         client.player.sendChatMessage("/k c");
@@ -132,28 +145,29 @@ public class ChatHudListenerMixin {
             String date = java.time.LocalDate.now().toString();
             String time = java.time.LocalTime.now().toString();
             String item = date + " " + time + ": " + spamMessage;
-            if(spammers.containsKey(playerName)) {
+            if (spammers.containsKey(playerName)) {
                 List<String> messages = spammers.get(playerName);
                 messages.add(item);
                 spammers.replace(playerName, messages);
             } else {
-                List<String> messages =  new ArrayList<>();
+                List<String> messages = new ArrayList<>();
                 messages.add(item);
                 spammers.put(playerName, messages);
             }
         }
     }
+
     private boolean containsSpam(String messageText) {
-        if(!messageText.contains(":")) return false;
+        if (!messageText.contains(":")) return false;
         char previous = ' ';
         int count = 1;
-        for(char c: messageText.toCharArray()) {
-            if(c == previous) count++;
+        for (char c : messageText.toCharArray()) {
+            if (c == previous) count++;
             else {
                 count = 1;
                 previous = c;
             }
         }
-        return count >= 7;
+        return count >= 6;
     }
 }

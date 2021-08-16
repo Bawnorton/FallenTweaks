@@ -21,16 +21,9 @@ import java.util.List;
 import java.util.Map;
 
 import static com.bawnorton.multitweaks.Global.*;
-import static com.bawnorton.multitweaks.Global.keybindSettings;
 
 @Mixin(ConnectScreen.class)
 public abstract class ConnectScreenMixin {
-    @Inject(method = "connect", at = @At("HEAD"))
-    public void saveAddress(final String address, final int port, CallbackInfo ci) {
-        loadConfig(address);
-        ipAddress = address;
-    }
-
     private static void loadConfig(String ipAddress) {
         File settingsFile = new File("config", "multitweaks.json");
         JsonObject jsonObject = null;
@@ -96,13 +89,22 @@ public abstract class ConnectScreenMixin {
                 helperDing = booleanJson.get("helperchat").getAsBoolean();
                 kingdomDing = booleanJson.get("kingdomchat").getAsBoolean();
                 visitDing = booleanJson.get("visitchat").getAsBoolean();
+                staffDing = booleanJson.get("staffchat").getAsBoolean();
                 messageDing = booleanJson.get("messagechat").getAsBoolean();
                 questionDing = booleanJson.get("question").getAsBoolean();
                 autoCharSpam = booleanJson.get("charspam").getAsBoolean();
                 farmDing = booleanJson.get("farm").getAsBoolean();
                 barracksDing = booleanJson.get("barracks").getAsBoolean();
                 blacksmithDing = booleanJson.get("blacksmith").getAsBoolean();
-            } catch (NullPointerException ignored) {
+                betterBank = booleanJson.get("betterbank").getAsBoolean();
+                betterTroops = booleanJson.get("bettertroops").getAsBoolean();
+                betterFarm = booleanJson.get("betterfarm").getAsBoolean();
+                betterRaid = booleanJson.get("betterraid").getAsBoolean();
+                betterCombat = booleanJson.get("bettercombat").getAsBoolean();
+                displayChat = booleanJson.get("displaychat").getAsBoolean();
+                barracksTime = booleanJson.get("barracksscoreboard").getAsBoolean();
+            } catch (NullPointerException e) {
+                e.printStackTrace();
             }
             try {
                 JsonObject spammerJson = serverJson.get("spammers").getAsJsonObject();
@@ -121,5 +123,11 @@ public abstract class ConnectScreenMixin {
                 keybindSettings[i] = new KeybindSettings(InputUtil.UNKNOWN_KEY, "");
             }
         }
+    }
+
+    @Inject(method = "connect", at = @At("HEAD"))
+    public void saveAddress(final String address, final int port, CallbackInfo ci) {
+        loadConfig(address);
+        ipAddress = address;
     }
 }
