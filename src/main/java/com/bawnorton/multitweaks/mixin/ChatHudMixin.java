@@ -109,7 +109,7 @@ public abstract class ChatHudMixin {
             String outCombat = "(.*)You're no longer in combat! You can logout safely\\.";
             String teleporting = "(.*)Teleporting to your kingdom home in (.*)";
             String addQuiver = "(.*)arrows were added to your quiver. (.*)";
-            String fullQuiver = "(.*)Your Quiver is full, you can't pickup any new arrows\\.";
+            String fullQuiver = "(.*)Your Quiver is full(.*)";
             if (messageString.matches(inCombat)) {
                 removeLastMessage(message, inCombat);
             } else if (messageString.matches(outCombat)) {
