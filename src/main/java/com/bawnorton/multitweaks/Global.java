@@ -3,8 +3,10 @@ package com.bawnorton.multitweaks;
 import com.bawnorton.multitweaks.config.KeybindSettings;
 import me.shedaniel.clothconfig2.api.ConfigBuilder;
 import net.minecraft.client.MinecraftClient;
+import net.minecraft.client.network.AbstractClientPlayerEntity;
 import net.minecraft.client.options.KeyBinding;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -13,7 +15,8 @@ public class Global {
     public static final String NAME = "Multiplayer Tweaks";
     public static final String MOD_ID = "multitweaks";
     public static final int[] keyCounts = {0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23};
-    public final static HashMap<String, Double> troopTimes = new HashMap<String, Double>() {{
+    public static List<AbstractClientPlayerEntity> lastPlayers;
+    public static final HashMap<String, Double> troopTimes = new HashMap<String, Double>() {{
         put("Husk", 5.1);
         put("Skeleton", 4.2);
         put("Panda", 25.5);
@@ -63,6 +66,7 @@ public class Global {
     public static boolean displayChat = true;
     public static boolean barracksTime = false;
     public static boolean autoCharSpam = false;
+    public static HashMap<String, Boolean> visitors = new HashMap<>();
     public static String ipAddress = "";
     public static String incomingSound;
     public static ConfigBuilder builder;

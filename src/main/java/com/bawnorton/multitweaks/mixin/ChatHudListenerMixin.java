@@ -3,6 +3,8 @@ package com.bawnorton.multitweaks.mixin;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.gui.hud.ChatHud;
 import net.minecraft.client.gui.hud.ChatHudListener;
+import net.minecraft.client.network.AbstractClientPlayerEntity;
+import net.minecraft.entity.Entity;
 import net.minecraft.sound.SoundEvents;
 import net.minecraft.text.Text;
 import org.spongepowered.asm.mixin.Final;
@@ -111,6 +113,11 @@ public class ChatHudListenerMixin {
         if (messageText.matches("(.*)Started training of your (.*)! You have (.*) spaces left!")) {
             String troopName = messageText.substring(messageText.indexOf("your") + 5, messageText.indexOf("!"));
             trainTime += troopTimes.get(troopName);
+        }
+
+        if (messageText.startsWith("VISITATION") && messageText.contains("is now visiting your kingdom")) {
+            String playerName = messageText.substring(messageText.indexOf("VISITATION") + 11, messageText.indexOf(" is now"));
+            visitors.put(playerName, true);
         }
 
         boolean charSpam = containsSpam(messageText);
