@@ -105,7 +105,11 @@ public abstract class ChatHudMixin {
                 this.addMessage(replacementText);
                 callbackInfo.cancel();
             } else if (messageString.matches(noSpace)) {
-                removeLastMessage(noSpace);
+                String replacement = "§cYour Barracks is full";
+                replacementText = new LiteralText(replacement + ".");
+                removeLastMessage(replacement + "\\.");
+                this.addMessage(replacementText);
+                callbackInfo.cancel();
             } else if (messageString.matches(trainTroop)) {
                 String replacement = "§aTraining: §2" + messageString.substring(messageString.indexOf("your") + 5, messageString.indexOf("! Y")) + "§a | Space left: §2" + messageString.substring(messageString.indexOf("have") + 5, messageString.indexOf(" spaces"));
                 replacementText = new LiteralText(replacement + ".");
