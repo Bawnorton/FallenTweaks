@@ -19,6 +19,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import static com.bawnorton.multitweaks.Global.*;
+import static com.bawnorton.multitweaks.MultiTweaksClient.isStaff;
 
 @SuppressWarnings("rawtypes")
 public class MultiTweaksConfig {
@@ -32,7 +33,9 @@ public class MultiTweaksConfig {
         if (ipAddress.contains("fallenkingdom") || inDev) {
             soundCategory = builder.getOrCreateCategory(new TranslatableText("category.multitweaks.sounds"));
             utilityCategory = builder.getOrCreateCategory(new TranslatableText("category.multitweaks.utility"));
-            spamCategory = builder.getOrCreateCategory(new TranslatableText("category.multitweaks.spam"));
+            if(isStaff()) {
+                spamCategory = builder.getOrCreateCategory(new TranslatableText("category.multitweaks.spam"));
+            }
         }
         ConfigEntryBuilder entryBuilder = builder.entryBuilder();
         List<List<AbstractConfigListEntry>> entries = new ArrayList<>();
@@ -66,14 +69,16 @@ public class MultiTweaksConfig {
                     .setDefaultValue(visitDing)
                     .setSaveConsumer(newValue -> visitDing = newValue)
                     .build());
-            soundCategory.addEntry(entryBuilder.startBooleanToggle(new LiteralText("Helper Chat"), helperDing)
-                    .setDefaultValue(helperDing)
-                    .setSaveConsumer(newValue -> helperDing = newValue)
-                    .build());
-            soundCategory.addEntry(entryBuilder.startBooleanToggle(new LiteralText("Staff Chat"), staffDing)
-                    .setDefaultValue(staffDing)
-                    .setSaveConsumer(newValue -> staffDing = newValue)
-                    .build());
+            if(isStaff()) {
+                soundCategory.addEntry(entryBuilder.startBooleanToggle(new LiteralText("Helper Chat"), helperDing)
+                        .setDefaultValue(helperDing)
+                        .setSaveConsumer(newValue -> helperDing = newValue)
+                        .build());
+                soundCategory.addEntry(entryBuilder.startBooleanToggle(new LiteralText("Staff Chat"), staffDing)
+                        .setDefaultValue(staffDing)
+                        .setSaveConsumer(newValue -> staffDing = newValue)
+                        .build());
+            }
             soundCategory.addEntry(entryBuilder.startBooleanToggle(new LiteralText("Direct Messages"), messageDing)
                     .setDefaultValue(messageDing)
                     .setSaveConsumer(newValue -> messageDing = newValue)
@@ -128,19 +133,22 @@ public class MultiTweaksConfig {
                     .setDefaultValue(barracksTime)
                     .setSaveConsumer(newValue -> barracksTime = newValue)
                     .build());
-            utilityCategory.addEntry(entryBuilder.startTextDescription(new LiteralText("Automatic"))
-                    .build());
-            utilityCategory.addEntry(entryBuilder.startBooleanToggle(new LiteralText("Auto Warn Char Spam"), autoCharSpam)
-                    .setDefaultValue(autoCharSpam)
-                    .setSaveConsumer(newValue -> autoCharSpam = newValue)
-                    .build());
-            for (String s : spammers.keySet()) {
-                List<AbstractConfigListEntry> categories = new ArrayList<>();
-                List<String> messages = spammers.get(s);
-                for (String message : messages) {
-                    categories.add(entryBuilder.startTextDescription(new LiteralText(message)).build());
+            if(isStaff()) {
+                utilityCategory.addEntry(entryBuilder.startTextDescription(new LiteralText("Automatic"))
+                        .build());
+
+                utilityCategory.addEntry(entryBuilder.startBooleanToggle(new LiteralText("Auto Warn Char Spam"), autoCharSpam)
+                        .setDefaultValue(autoCharSpam)
+                        .setSaveConsumer(newValue -> autoCharSpam = newValue)
+                        .build());
+                for (String s : spammers.keySet()) {
+                    List<AbstractConfigListEntry> categories = new ArrayList<>();
+                    List<String> messages = spammers.get(s);
+                    for (String message : messages) {
+                        categories.add(entryBuilder.startTextDescription(new LiteralText(message)).build());
+                    }
+                    spamCategory.addEntry(entryBuilder.startSubCategory(new LiteralText(s + ": " + messages.size()), categories).build());
                 }
-                spamCategory.addEntry(entryBuilder.startSubCategory(new LiteralText(s + ": " + messages.size()), categories).build());
             }
         }
         builder.setSavingRunnable(() -> {

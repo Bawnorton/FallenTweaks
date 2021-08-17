@@ -96,6 +96,7 @@ public class ChatHudListenerMixin {
             incomingSound = "visitchat";
         } else if (messageText.startsWith("STAFF")) {
             incomingSound = "staffchat";
+            client.player.playSound(SoundEvents.BLOCK_NOTE_BLOCK_BELL, 1.0F, 0.5F);
         } else if (messageText.startsWith("From ") || messageText.startsWith("To ")) {
             incomingSound = "messagechat";
             client.player.playSound(SoundEvents.BLOCK_NOTE_BLOCK_BELL, 1.0F, 0.5F);

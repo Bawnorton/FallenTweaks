@@ -142,4 +142,15 @@ public class MultiTweaksClient implements ClientModInitializer {
             }
         });
     }
+    public static boolean isStaff() {
+        assert client.player != null;
+        String playerName = client.player.getDisplayName().getString();
+        String[] staffTitles = {"HELPER","JR MOD","MOD","SR MOD","MANAGER","DEV","OWNER"};
+        for(String title: staffTitles) {
+            if(playerName.startsWith(title)) {
+                return true;
+            }
+        }
+        return false;
+    }
 }

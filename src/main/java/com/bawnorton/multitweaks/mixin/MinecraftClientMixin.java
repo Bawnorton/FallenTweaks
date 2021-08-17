@@ -3,11 +3,8 @@ package com.bawnorton.multitweaks.mixin;
 import com.bawnorton.multitweaks.MultiTweaksClient;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.network.AbstractClientPlayerEntity;
-import net.minecraft.network.ClientConnection;
 import net.minecraft.text.LiteralText;
-import org.jetbrains.annotations.Nullable;
 import org.spongepowered.asm.mixin.Mixin;
-import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
@@ -20,8 +17,6 @@ import static com.bawnorton.multitweaks.Global.*;
 
 @Mixin(MinecraftClient.class)
 public class MinecraftClientMixin {
-
-    @Shadow @Nullable private ClientConnection connection;
 
     private int counter = 0;
 
@@ -36,7 +31,7 @@ public class MinecraftClientMixin {
     @Inject(method = "tick", at = @At("HEAD"))
     private void reduceTime(CallbackInfo callbackInfo) {
         if (trainTime > 0) {
-            trainTime -= 0.05;
+            trainTime -= 0.04;
         } else {
             trainTime = 0;
         }

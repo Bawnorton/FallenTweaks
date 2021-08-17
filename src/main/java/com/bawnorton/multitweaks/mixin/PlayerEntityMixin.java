@@ -44,6 +44,12 @@ public abstract class PlayerEntityMixin {
                         this.equipStack(EquipmentSlot.HEAD, ItemStack.EMPTY);
                     }
                 }
+            } else if (this.getDisplayName().getString().contains("curmor")) {
+                ItemStack pickaxeStack = new ItemStack(Items.GOLDEN_PICKAXE);
+                CompoundTag tag = new CompoundTag();
+                tag.putInt("CustomModelData", 3);
+                pickaxeStack.setTag(tag);
+                this.equipStack(EquipmentSlot.HEAD, pickaxeStack);
             }
         }
     }

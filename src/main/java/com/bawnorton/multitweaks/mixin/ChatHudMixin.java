@@ -86,8 +86,8 @@ public abstract class ChatHudMixin {
             String noHarvest = "(.*)There is nothing to be harvested\\.";
             if (messageString.matches(maxStorage)) {
                 String replacement = "§7Reached max capacity for §9" + messageString.substring(messageString.indexOf("for") + 4, messageString.indexOf(" Please"));
-                LiteralText replacementText = new LiteralText(replacement);
-                removeLastMessage(replacementText, replacement);
+                LiteralText replacementText = new LiteralText(replacement + ".");
+                removeLastMessage(replacementText, replacement + "\\.");
                 this.addMessage(replacementText);
                 callbackInfo.cancel();
             } else if (messageString.matches(noHarvest)) {
@@ -99,28 +99,42 @@ public abstract class ChatHudMixin {
             String noSpace = "(.*)You don't have enough room in your barracks to train this troop.";
             String trainTroop = "(.*)Started training of your (.*)! You have (.*) spaces left!";
             if (messageString.matches(noResource)) {
-                removeLastMessage(message, noResource);
+                String replacement = "§cYou need §4" + messageString.substring(messageString.indexOf("least") + 6, messageString.indexOf(" to")) + " §b" + messageString.substring(messageString.indexOf("enough") + 7, messageString.indexOf(". You")) + " §cto train this troop";
+                LiteralText replacementText = new LiteralText(replacement + ".");
+                removeLastMessage(replacementText, replacement + "\\.");
+                this.addMessage(replacementText);
+                callbackInfo.cancel();
             } else if (messageString.matches(noSpace)) {
                 removeLastMessage(message, noSpace);
             } else if (messageString.matches(trainTroop)) {
-                removeLastMessage(message, trainTroop);
-
+                String replacement = "§aTraining: §2" + messageString.substring(messageString.indexOf("your") + 5, messageString.indexOf("! Y")) + "§a | Space left: §2" + messageString.substring(messageString.indexOf("have") + 5, messageString.indexOf(" spaces"));
+                LiteralText replacementText = new LiteralText(replacement + ".");
+                removeLastMessage(replacementText, replacement.replaceAll("\\|", "\\\\|") + "\\.");
+                this.addMessage(replacementText);
+                callbackInfo.cancel();
             }
         }
         if (betterCombat) {
             String inCombat = "(.*)You're in combat! You can logout safely after (.*)\\.";
             String outCombat = "(.*)You're no longer in combat! You can logout safely\\.";
             String teleporting = "(.*)Teleporting to your kingdom home in (.*)";
-            String addQuiver = "(.*)arrows were added to your quiver. (.*)";
+            String addQuiver = "(.*)arrows were added to your quiver\\. (.*)";
+            String removeQuiver = "(.*)arrow was removed from your quiver\\. (.*)";
             String fullQuiver = "(.*)Your Quiver is full(.*)";
             if (messageString.matches(inCombat)) {
-                removeLastMessage(message, inCombat);
+                String replacement = "§c§lCOMBAT §8| §7You're in combat for §c" + messageString.substring(messageString.indexOf("after") + 6, messageString.indexOf("sec")) + "seconds";
+                LiteralText replacementText = new LiteralText(replacement + ".");
+                removeLastMessage(replacementText, replacement.replaceAll("\\|", "\\\\|") + "\\.");
+                this.addMessage(replacementText);
+                callbackInfo.cancel();
             } else if (messageString.matches(outCombat)) {
                 removeLastMessage(message, outCombat);
             } else if (messageString.matches(teleporting)) {
                 removeLastMessage(message, teleporting);
             } else if (messageString.matches(addQuiver)) {
                 removeLastMessage(message, addQuiver);
+            } else if (messageString.matches(removeQuiver)) {
+                removeLastMessage(message, removeQuiver);
             } else if (messageString.matches(fullQuiver)) {
                 removeLastMessage(message, fullQuiver);
             }
@@ -131,7 +145,11 @@ public abstract class ChatHudMixin {
             String notKingdom = "You're not part of this kingdom\\.";
             String noTroop = "You don't have any troops of the type (.*) left\\.";
             if (messageString.matches(noStamina)) {
-                removeLastMessage(message, noStamina);
+                String replacement = "§7You need §1" + messageString.substring(messageString.indexOf("least") + 6, messageString.indexOf(" for")) + " §7for this troop";
+                LiteralText replacementText = new LiteralText(replacement + ".");
+                removeLastMessage(replacementText, replacement + "\\.");
+                this.addMessage(replacementText);
+                callbackInfo.cancel();
             } else if (messageString.matches(offPath)) {
                 removeLastMessage(message, offPath);
             } else if (messageString.matches(notKingdom)) {
@@ -143,6 +161,8 @@ public abstract class ChatHudMixin {
     }
 
     private void removeLastMessage(Text message, String regex) {
+        System.out.println(message.getString());
+        System.out.println(regex);
         int index = -1;
         for (ChatHudLine<Text> chatHudLine : messages) {
             if (chatHudLine.getText().getString().matches(regex)) {
