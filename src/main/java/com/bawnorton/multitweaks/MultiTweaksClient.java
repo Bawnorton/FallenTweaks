@@ -67,6 +67,7 @@ public class MultiTweaksClient implements ClientModInitializer {
             booleanJson.add("bettercombat", gson.toJsonTree(betterCombat));
             booleanJson.add("displaychat", gson.toJsonTree(displayChat));
             booleanJson.add("barracksscoreboard", gson.toJsonTree(barracksTime));
+            booleanJson.add("savedrank", gson.toJsonTree(savedRank));
 
             JsonObject spammerJson = new JsonObject();
             for (String s : spammers.keySet()) {

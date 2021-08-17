@@ -15,22 +15,22 @@ public class Global {
     public static final String NAME = "Multiplayer Tweaks";
     public static final String MOD_ID = "multitweaks";
     public static final int[] keyCounts = {0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23};
-    public static List<AbstractClientPlayerEntity> lastPlayers;
     public static final HashMap<String, Double> troopTimes = new HashMap<String, Double>() {{
-        put("Husk", 5.1);
-        put("Skeleton", 4.2);
-        put("Panda", 25.5);
-        put("Parrot", 3.4);
-        put("Rabbit", 12.8);
-        put("Witch", 51.0);
-        put("Creeper", 17.0);
-        put("Fox", 25.5);
-        put("Spider Jockey", 10.2);
-        put("Enderman", 25.5);
-        put("Chicken Jockey", 13.6);
-        put("Pufferfish Cannon", 34.0);
-        put("Phantom", 38.2);
-        put("Skeleton Horseman", 34.0);
+        put("Husk", 6.0);
+        put("Skeleton", 5.0);
+        put("Panda", 30.0);
+        put("Parrot", 4.0);
+        put("Rabbit", 15.0);
+        put("Witch", 60.0);
+        put("Creeper", 20.0);
+        put("Fox", 30.0);
+        put("Spider Jockey", 12.0);
+        put("Enderman", 30.0);
+        put("Jerry", 60.0);
+        put("Chicken Jockey", 16.0);
+        put("Pufferfish Cannon", 40.0);
+        put("Phantom", 45.0);
+        put("Skeleton Horseman", 40.0);
     }};
     public static boolean inDev = true;
     public static int cycleHat = 0;
@@ -68,6 +68,7 @@ public class Global {
     public static boolean autoCharSpam = false;
     public static HashMap<String, Boolean> visitors = new HashMap<>();
     public static String ipAddress = "";
+    public static String savedRank = "NONE";
     public static String incomingSound;
     public static ConfigBuilder builder;
 }

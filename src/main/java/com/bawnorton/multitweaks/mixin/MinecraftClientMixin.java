@@ -31,7 +31,7 @@ public class MinecraftClientMixin {
     @Inject(method = "tick", at = @At("HEAD"))
     private void reduceTime(CallbackInfo callbackInfo) {
         if (trainTime > 0) {
-            trainTime -= 0.04;
+            trainTime -= 0.05;
         } else {
             trainTime = 0;
         }

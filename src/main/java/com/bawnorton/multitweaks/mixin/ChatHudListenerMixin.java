@@ -113,7 +113,10 @@ public class ChatHudListenerMixin {
 
         if (messageText.matches("(.*)Started training of your (.*)! You have (.*) spaces left!")) {
             String troopName = messageText.substring(messageText.indexOf("your") + 5, messageText.indexOf("!"));
-            trainTime += troopTimes.get(troopName);
+            trainTime += savedRank.equals("KNIGHT") ? troopTimes.get(troopName) * 0.95 :
+                         savedRank.equals("NOBLE") ? troopTimes.get(troopName) * 0.90 :
+                         savedRank.equals("MAJESTY") ? troopTimes.get(troopName) * 0.85 :
+                         troopTimes.get(troopName) ;
         }
 
         if (messageText.startsWith("VISITATION") && messageText.contains("is now visiting your kingdom")) {

@@ -125,6 +125,9 @@ public class MultiTweaksConfig {
                     .build());
             utilityCategory.addEntry(entryBuilder.startTextDescription(new LiteralText("Additions"))
                     .build());
+            utilityCategory.addEntry(entryBuilder.startSelector(new LiteralText("Your Rank"), new String[]{"NONE", "KNIGHT", "NOBLE", "MAJESTY"}, savedRank)
+                    .setSaveConsumer(newValue -> savedRank = newValue)
+                    .build());
             utilityCategory.addEntry(entryBuilder.startBooleanToggle(new LiteralText("Current Chat"), displayChat)
                     .setDefaultValue(displayChat)
                     .setSaveConsumer(newValue -> displayChat = newValue)

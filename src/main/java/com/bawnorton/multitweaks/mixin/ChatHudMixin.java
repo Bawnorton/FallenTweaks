@@ -34,14 +34,13 @@ public abstract class ChatHudMixin {
     private List<ChatHudLine<OrderedText>> visibleMessages;
 
     @Shadow
-    public abstract double getChatScale();
-
-    @Shadow
-    public abstract int getWidth();
-
-    @Shadow
     public abstract void addMessage(Text message);
 
+    @Shadow public abstract double getChatScale();
+
+    @Shadow public abstract int getWidth();
+
+    private static int indexOffset = -1;
 
     /**
      * @author curmor
@@ -65,20 +64,21 @@ public abstract class ChatHudMixin {
     @Inject(method = "addMessage(Lnet/minecraft/text/Text;IIZ)V", at = @At("HEAD"), cancellable = true)
     private void removeMessage(Text message, int messageId, int timestamp, boolean refresh, CallbackInfo callbackInfo) {
         String messageString = message.getString();
+        LiteralText replacementText = null;
         if (betterBank) {
             String noResource = "(.*)You do not have enough (.*) to sell\\.";
             String maxGold = "(.*)Your bank’s vault has reached its max capacity! Please upgrade your bank to increase its capacity\\.";
             String sellingResource = "(.*)Sold (.*) for (.*) Gold ꀕ\\.";
             if (messageString.matches(noResource)) {
-                removeLastMessage(message, noResource);
+                removeLastMessage(noResource);
             } else if (messageString.matches(maxGold)) {
                 String replacement = "§7Reached max capacity for §6Gold §7ꀕ";
-                LiteralText replacementText = new LiteralText(replacement + ".");
-                removeLastMessage(replacementText, replacement + "\\.");
+                replacementText = new LiteralText(replacement + ".");
+                removeLastMessage(replacement + "\\.");
                 this.addMessage(replacementText);
                 callbackInfo.cancel();
             } else if (messageString.matches(sellingResource)) {
-                removeLastMessage(message, sellingResource);
+                removeLastMessage(sellingResource);
             }
         }
         if (betterFarm) {
@@ -86,12 +86,12 @@ public abstract class ChatHudMixin {
             String noHarvest = "(.*)There is nothing to be harvested\\.";
             if (messageString.matches(maxStorage)) {
                 String replacement = "§7Reached max capacity for §9" + messageString.substring(messageString.indexOf("for") + 4, messageString.indexOf(" Please"));
-                LiteralText replacementText = new LiteralText(replacement + ".");
-                removeLastMessage(replacementText, replacement + "\\.");
+                replacementText = new LiteralText(replacement);
+                removeLastMessage(replacement);
                 this.addMessage(replacementText);
                 callbackInfo.cancel();
             } else if (messageString.matches(noHarvest)) {
-                removeLastMessage(message, noHarvest);
+                removeLastMessage(noHarvest);
             }
         }
         if (betterTroops) {
@@ -100,16 +100,15 @@ public abstract class ChatHudMixin {
             String trainTroop = "(.*)Started training of your (.*)! You have (.*) spaces left!";
             if (messageString.matches(noResource)) {
                 String replacement = "§cYou need §4" + messageString.substring(messageString.indexOf("least") + 6, messageString.indexOf(" to")) + " §b" + messageString.substring(messageString.indexOf("enough") + 7, messageString.indexOf(". You")) + " §cto train this troop";
-                LiteralText replacementText = new LiteralText(replacement + ".");
-                removeLastMessage(replacementText, replacement + "\\.");
+                replacementText = new LiteralText(replacement + ".");
+                removeLastMessage(replacement + "\\.");
                 this.addMessage(replacementText);
                 callbackInfo.cancel();
             } else if (messageString.matches(noSpace)) {
-                removeLastMessage(message, noSpace);
+                removeLastMessage(noSpace);
             } else if (messageString.matches(trainTroop)) {
                 String replacement = "§aTraining: §2" + messageString.substring(messageString.indexOf("your") + 5, messageString.indexOf("! Y")) + "§a | Space left: §2" + messageString.substring(messageString.indexOf("have") + 5, messageString.indexOf(" spaces"));
-                LiteralText replacementText = new LiteralText(replacement + ".");
-                removeLastMessage(replacementText, replacement.replaceAll("\\|", "\\\\|") + "\\.");
+                replacementText = new LiteralText(replacement + ".");
                 this.addMessage(replacementText);
                 callbackInfo.cancel();
             }
@@ -123,20 +122,20 @@ public abstract class ChatHudMixin {
             String fullQuiver = "(.*)Your Quiver is full(.*)";
             if (messageString.matches(inCombat)) {
                 String replacement = "§c§lCOMBAT §8| §7You're in combat for §c" + messageString.substring(messageString.indexOf("after") + 6, messageString.indexOf("sec")) + "seconds";
-                LiteralText replacementText = new LiteralText(replacement + ".");
-                removeLastMessage(replacementText, replacement.replaceAll("\\|", "\\\\|") + "\\.");
+                replacementText = new LiteralText(replacement + ".");
+                removeLastMessage(replacement.replaceAll("\\|", "\\\\|") + "\\.");
                 this.addMessage(replacementText);
                 callbackInfo.cancel();
             } else if (messageString.matches(outCombat)) {
-                removeLastMessage(message, outCombat);
+                removeLastMessage(outCombat);
             } else if (messageString.matches(teleporting)) {
-                removeLastMessage(message, teleporting);
+                removeLastMessage(teleporting);
             } else if (messageString.matches(addQuiver)) {
-                removeLastMessage(message, addQuiver);
+                removeLastMessage(addQuiver);
             } else if (messageString.matches(removeQuiver)) {
-                removeLastMessage(message, removeQuiver);
+                removeLastMessage(removeQuiver);
             } else if (messageString.matches(fullQuiver)) {
-                removeLastMessage(message, fullQuiver);
+                removeLastMessage(fullQuiver);
             }
         }
         if (betterRaid) {
@@ -145,24 +144,25 @@ public abstract class ChatHudMixin {
             String notKingdom = "You're not part of this kingdom\\.";
             String noTroop = "You don't have any troops of the type (.*) left\\.";
             if (messageString.matches(noStamina)) {
-                String replacement = "§7You need §1" + messageString.substring(messageString.indexOf("least") + 6, messageString.indexOf(" for")) + " §7for this troop";
-                LiteralText replacementText = new LiteralText(replacement + ".");
-                removeLastMessage(replacementText, replacement + "\\.");
+                String replacement = "§cYou need §b" + messageString.substring(messageString.indexOf("least") + 6, messageString.indexOf(" for")) + " §cstamina for this troop";
+                replacementText = new LiteralText(replacement + ".");
+                removeLastMessage(replacement + "\\.");
                 this.addMessage(replacementText);
                 callbackInfo.cancel();
             } else if (messageString.matches(offPath)) {
-                removeLastMessage(message, offPath);
+                removeLastMessage(offPath);
             } else if (messageString.matches(notKingdom)) {
-                removeLastMessage(message, notKingdom);
+                removeLastMessage(notKingdom);
             } else if (messageString.matches(noTroop)) {
-                removeLastMessage(message, noTroop);
+                removeLastMessage(noTroop);
             }
         }
+        int i = MathHelper.floor((double)this.getWidth() / this.getChatScale());
+        int size = ChatMessages.breakRenderedChatMessageLines(replacementText == null ? message : replacementText, i, this.client.textRenderer).size() - 1;
+        indexOffset += size;
     }
 
-    private void removeLastMessage(Text message, String regex) {
-        System.out.println(message.getString());
-        System.out.println(regex);
+    private void removeLastMessage(String regex) {
         int index = -1;
         for (ChatHudLine<Text> chatHudLine : messages) {
             if (chatHudLine.getText().getString().matches(regex)) {
@@ -170,12 +170,9 @@ public abstract class ChatHudMixin {
             }
         }
         if (index != -1) {
-            int i = MathHelper.floor((double) this.getWidth() / this.getChatScale());
-            int num = ChatMessages.breakRenderedChatMessageLines(message, i, this.client.textRenderer).size();
             messages.remove(index);
-            for (int j = 0; j < num; j++) {
-                visibleMessages.remove(index);
-            }
+            visibleMessages.remove(index + indexOffset);
+            indexOffset = 0;
         }
     }
 }

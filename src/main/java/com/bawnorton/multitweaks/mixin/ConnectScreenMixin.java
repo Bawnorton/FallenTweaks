@@ -103,6 +103,7 @@ public abstract class ConnectScreenMixin {
                 betterCombat = booleanJson.get("bettercombat").getAsBoolean();
                 displayChat = booleanJson.get("displaychat").getAsBoolean();
                 barracksTime = booleanJson.get("barracksscoreboard").getAsBoolean();
+                savedRank = booleanJson.get("savedrank").getAsString();
             } catch (NullPointerException e) {
                 e.printStackTrace();
             }

@@ -41,9 +41,7 @@ public abstract class InGameHubMixin {
             this.scaledHeight = this.client.getWindow().getScaledHeight();
             this.scaledWidth = this.client.getWindow().getScaledWidth();
             int colour = 16733525;
-            double minutes = (double) Math.round(((trainTime % 3600) / 60 * 100) * 10) / 100;
-            double seconds = (double) Math.round(((trainTime % 60) / 60 * 100) * 10) / 100;
-            double time = (int) (minutes + seconds) / 10.0;
+            double time = (int) (trainTime / 6.0) / 10.0;
             DrawableHelper.drawCenteredString(matricies, client.textRenderer, "Barracks Train Time: " + time + " min(s)", this.scaledWidth - 90, this.scaledHeight - 30, colour);
         }
     }
