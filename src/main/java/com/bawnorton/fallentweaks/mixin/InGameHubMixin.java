@@ -1,10 +1,18 @@
-package com.bawnorton.multitweaks.mixin;
+package com.bawnorton.fallentweaks.mixin;
 
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.gui.DrawableHelper;
 import net.minecraft.client.gui.hud.InGameHud;
+import net.minecraft.client.gui.screen.GameMenuScreen;
+import net.minecraft.client.gui.screen.Screen;
+import net.minecraft.client.resource.metadata.AnimationResourceMetadata;
+import net.minecraft.client.texture.NativeImage;
+import net.minecraft.client.texture.Sprite;
+import net.minecraft.client.texture.SpriteAtlasTexture;
 import net.minecraft.client.util.math.MatrixStack;
+import net.minecraft.data.client.model.Texture;
 import net.minecraft.scoreboard.ScoreboardObjective;
+import net.minecraft.util.Identifier;
 import org.spongepowered.asm.mixin.Final;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
@@ -13,7 +21,7 @@ import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.Redirect;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
-import static com.bawnorton.multitweaks.Global.*;
+import static com.bawnorton.fallentweaks.Global.*;
 
 
 @Mixin(InGameHud.class)

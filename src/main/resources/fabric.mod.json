@@ -1,10 +1,10 @@
 {
   "schemaVersion": 1,
-  "id": "multitweaks",
+  "id": "fallentweaks",
   "version": "${version}",
 
-  "name": "Multiplayer Tweaks",
-  "description": "Mod that provides a couple tweaks for multiplayer",
+  "name": "Fallen Kingdom Tweaks",
+  "description": "Mod that provides a couple tweaks for the play.fallenkingdom.co server\nWorks on other servers too",
   "authors": [
     "Curmor"
   ],
@@ -14,19 +14,19 @@
   },
 
   "license": "CC0-1.0",
-  "icon": "assets/multitweaks/icon.png",
+  "icon": "assets/fallentweaks/icon.png",
 
   "environment": "*",
   "entrypoints": {
     "main": [
-      "com.bawnorton.multitweaks.MultiTweaks"
+      "com.bawnorton.fallentweaks.FallenTweaks"
     ],
     "client": [
-      "com.bawnorton.multitweaks.MultiTweaksClient"
+      "com.bawnorton.fallentweaks.FallenTweaksClient"
     ]
   },
   "mixins": [
-    "multitweaks.mixins.json"
+    "fallentweaks.mixins.json"
   ],
   "depends": {
     "fabricloader": ">=0.7.4",

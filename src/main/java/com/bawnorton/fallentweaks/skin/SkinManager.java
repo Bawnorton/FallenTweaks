@@ -1,4 +1,4 @@
-package com.bawnorton.multitweaks.skin;
+package com.bawnorton.fallentweaks.skin;
 
 import com.google.gson.Gson;
 import com.google.gson.JsonObject;
@@ -8,7 +8,7 @@ import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
 
-import static com.bawnorton.multitweaks.Global.client;
+import static com.bawnorton.fallentweaks.Global.client;
 
 public class SkinManager {
     private static final Session session = client.getSession();

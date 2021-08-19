@@ -1,10 +1,12 @@
-package com.bawnorton.multitweaks.mixin;
+package com.bawnorton.fallentweaks.mixin;
 
 import net.minecraft.client.MinecraftClient;
+import net.minecraft.client.font.TextHandler;
 import net.minecraft.client.gui.hud.ChatHud;
 import net.minecraft.client.gui.hud.ChatHudLine;
 import net.minecraft.client.gui.screen.ChatScreen;
 import net.minecraft.client.util.ChatMessages;
+import net.minecraft.text.CharacterVisitor;
 import net.minecraft.text.LiteralText;
 import net.minecraft.text.OrderedText;
 import net.minecraft.text.Text;
@@ -17,9 +19,11 @@ import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
+import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
-import static com.bawnorton.multitweaks.Global.*;
+import static com.bawnorton.fallentweaks.Global.*;
 
 @Mixin(ChatHud.class)
 public abstract class ChatHudMixin {
@@ -39,8 +43,6 @@ public abstract class ChatHudMixin {
     @Shadow public abstract double getChatScale();
 
     @Shadow public abstract int getWidth();
-
-    private static int indexOffset = -1;
 
     /**
      * @author curmor
@@ -161,9 +163,6 @@ public abstract class ChatHudMixin {
                 removeLastMessage(noTroop);
             }
         }
-        int i = MathHelper.floor((double)this.getWidth() / this.getChatScale());
-        int size = ChatMessages.breakRenderedChatMessageLines(replacementText == null ? message : replacementText, i, this.client.textRenderer).size() - 1;
-        indexOffset += size;
     }
 
     private void removeLastMessage(String regex) {
@@ -174,9 +173,13 @@ public abstract class ChatHudMixin {
             }
         }
         if (index != -1) {
+            String message = messages.get(index).getText().getString();
+            System.out.println(message);
+            List<String> copy = new ArrayList<>(visibleStringMessages);
+            Collections.reverse(copy);
+            visibleMessages.remove(copy.indexOf(message));
+            visibleStringMessages.remove(message);
             messages.remove(index);
-            visibleMessages.remove(index + indexOffset);
-            indexOffset = 0;
         }
     }
 }

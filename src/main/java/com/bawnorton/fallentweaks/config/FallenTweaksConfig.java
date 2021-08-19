@@ -1,6 +1,6 @@
-package com.bawnorton.multitweaks.config;
+package com.bawnorton.fallentweaks.config;
 
-import com.bawnorton.multitweaks.MultiTweaksClient;
+import com.bawnorton.fallentweaks.FallenTweaksClient;
 import me.shedaniel.clothconfig2.api.AbstractConfigListEntry;
 import me.shedaniel.clothconfig2.api.ConfigBuilder;
 import me.shedaniel.clothconfig2.api.ConfigCategory;
@@ -18,23 +18,23 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
-import static com.bawnorton.multitweaks.Global.*;
-import static com.bawnorton.multitweaks.MultiTweaksClient.isStaff;
+import static com.bawnorton.fallentweaks.Global.*;
+import static com.bawnorton.fallentweaks.FallenTweaksClient.isStaff;
 
 @SuppressWarnings("rawtypes")
-public class MultiTweaksConfig {
+public class FallenTweaksConfig {
 
     public static ConfigBuilder buildScreen(String name, Screen parent) {
         builder = ConfigBuilder.create().setParentScreen(parent).setTitle(new TranslatableText(name));
-        ConfigCategory keybindCategory = builder.getOrCreateCategory(new TranslatableText("category.multitweaks.keybind"));
+        ConfigCategory keybindCategory = builder.getOrCreateCategory(new TranslatableText("category.fallentweaks.keybind"));
         ConfigCategory soundCategory = null;
         ConfigCategory utilityCategory = null;
         ConfigCategory spamCategory = null;
         if (ipAddress.contains("fallenkingdom") || inDev) {
-            soundCategory = builder.getOrCreateCategory(new TranslatableText("category.multitweaks.sounds"));
-            utilityCategory = builder.getOrCreateCategory(new TranslatableText("category.multitweaks.utility"));
+            soundCategory = builder.getOrCreateCategory(new TranslatableText("category.fallentweaks.sounds"));
+            utilityCategory = builder.getOrCreateCategory(new TranslatableText("category.fallentweaks.utility"));
             if(isStaff()) {
-                spamCategory = builder.getOrCreateCategory(new TranslatableText("category.multitweaks.spam"));
+                spamCategory = builder.getOrCreateCategory(new TranslatableText("category.fallentweaks.spam"));
             }
         }
         ConfigEntryBuilder entryBuilder = builder.entryBuilder();
@@ -45,11 +45,11 @@ public class MultiTweaksConfig {
                 keybindSettings[finalI] = new KeybindSettings(InputUtil.UNKNOWN_KEY, "");
             }
             List<AbstractConfigListEntry> categories = new ArrayList<>();
-            categories.add(entryBuilder.startKeyCodeField(new TranslatableText("option.multitweaks.keybind"), keybindSettings[finalI].key)
+            categories.add(entryBuilder.startKeyCodeField(new TranslatableText("option.fallentweaks.keybind"), keybindSettings[finalI].key)
                     .setDefaultValue(InputUtil.UNKNOWN_KEY)
                     .setSaveConsumer(newValue -> keybindSettings[finalI].key = newValue)
                     .build());
-            categories.add(entryBuilder.startTextField(new TranslatableText("option.multitweaks.text"), keybindSettings[finalI].phrase)
+            categories.add(entryBuilder.startTextField(new TranslatableText("option.fallentweaks.text"), keybindSettings[finalI].phrase)
                     .setDefaultValue("")
                     .setSaveConsumer(newValue -> keybindSettings[finalI].phrase = newValue)
                     .build());
@@ -136,6 +136,11 @@ public class MultiTweaksConfig {
                     .setDefaultValue(barracksTime)
                     .setSaveConsumer(newValue -> barracksTime = newValue)
                     .build());
+            utilityCategory.addEntry(entryBuilder.startBooleanToggle(new LiteralText("Visitor Leave Alert"), leaveVisitors)
+                    .setDefaultValue(leaveVisitors)
+                    .setSaveConsumer(newValue -> leaveVisitors = newValue)
+                    .setTooltip(new LiteralText("§cWill trigger if player leaves your render distance"))
+                    .build());
             if(isStaff()) {
                 utilityCategory.addEntry(entryBuilder.startTextDescription(new LiteralText("Automatic"))
                         .build());
@@ -165,7 +170,7 @@ public class MultiTweaksConfig {
                     if (bind.matchesKey(key.getCode(), key.getCode())) {
 
                         client.player.sendMessage(new LiteralText(
-                                "MultiTweaks: Did not register Bind " + (i + 1) + " (" + key.getLocalizedText().getString() + ") <- Conflicting Keybind, Please Re-Bind"), false);
+                                "§cfallentweaks: Did not register §6Bind " + (i + 1) + " §4(" + key.getLocalizedText().getString() + ")§c \nConflicting Keybind, Please Re-Bind"), false);
                         continue outer;
                     }
                 }
@@ -176,7 +181,7 @@ public class MultiTweaksConfig {
                         Integer.toString(keyCounts[i]),
                         InputUtil.Type.KEYSYM,
                         key.getCode(),
-                        "category.multitweaks.gui"
+                        "category.fallentweaks.gui"
                 ));
                 ClientTickEvents.END_CLIENT_TICK.register(client -> {
                     while (textBinds[finalI].wasPressed()) {
@@ -188,7 +193,7 @@ public class MultiTweaksConfig {
             }
             assert client.world != null;
             try {
-                MultiTweaksClient.saveConfig();
+                FallenTweaksClient.saveConfig();
             } catch (IOException e) {
                 e.printStackTrace();
             }

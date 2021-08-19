@@ -1,4 +1,4 @@
-package com.bawnorton.multitweaks.mixin;
+package com.bawnorton.fallentweaks.mixin;
 
 import net.minecraft.entity.EquipmentSlot;
 import net.minecraft.entity.player.PlayerEntity;
@@ -12,7 +12,7 @@ import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
-import static com.bawnorton.multitweaks.Global.*;
+import static com.bawnorton.fallentweaks.Global.*;
 
 @Mixin(PlayerEntity.class)
 public abstract class PlayerEntityMixin {

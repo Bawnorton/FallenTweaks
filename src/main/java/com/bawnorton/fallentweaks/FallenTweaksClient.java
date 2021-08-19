@@ -1,8 +1,8 @@
-package com.bawnorton.multitweaks;
+package com.bawnorton.fallentweaks;
 
-import com.bawnorton.multitweaks.config.KeybindSettings;
-import com.bawnorton.multitweaks.config.MultiTweaksConfig;
-import com.bawnorton.multitweaks.skin.SkinManager;
+import com.bawnorton.fallentweaks.config.FallenTweaksConfig;
+import com.bawnorton.fallentweaks.config.KeybindSettings;
+import com.bawnorton.fallentweaks.skin.SkinManager;
 import com.google.gson.Gson;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
@@ -10,6 +10,7 @@ import com.google.gson.JsonParser;
 import net.fabricmc.api.ClientModInitializer;
 import net.fabricmc.fabric.api.client.event.lifecycle.v1.ClientTickEvents;
 import net.fabricmc.fabric.api.client.keybinding.v1.KeyBindingHelper;
+import net.minecraft.client.gui.DrawableHelper;
 import net.minecraft.client.gui.screen.Screen;
 import net.minecraft.client.options.KeyBinding;
 import net.minecraft.client.util.InputUtil;
@@ -23,9 +24,9 @@ import java.io.IOException;
 import java.util.Map;
 import java.util.Set;
 
-import static com.bawnorton.multitweaks.Global.*;
+import static com.bawnorton.fallentweaks.Global.*;
 
-public class MultiTweaksClient implements ClientModInitializer {
+public class FallenTweaksClient implements ClientModInitializer {
 
     public static void saveConfig() throws IOException {
         File settingsFile = new File("config", "multitweaks.json");
@@ -68,6 +69,7 @@ public class MultiTweaksClient implements ClientModInitializer {
             booleanJson.add("displaychat", gson.toJsonTree(displayChat));
             booleanJson.add("barracksscoreboard", gson.toJsonTree(barracksTime));
             booleanJson.add("savedrank", gson.toJsonTree(savedRank));
+            booleanJson.add("leavevisitors", gson.toJsonTree(leaveVisitors));
 
             JsonObject spammerJson = new JsonObject();
             for (String s : spammers.keySet()) {
@@ -92,32 +94,32 @@ public class MultiTweaksClient implements ClientModInitializer {
 
     private void registerKeybinds() {
         menuKeybind = KeyBindingHelper.registerKeyBinding(new KeyBinding(
-                "key.multitweaks.gui",
+                "key.fallentweaks.gui",
                 InputUtil.Type.KEYSYM,
                 GLFW.GLFW_KEY_M,
-                "category.multitweaks.gui"
+                "category.fallentweaks.gui"
         ));
         scoreboardKeybind = KeyBindingHelper.registerKeyBinding(new KeyBinding(
-                "key.multitweaks.toggle.scoreboard",
+                "key.fallentweaks.toggle.scoreboard",
                 InputUtil.Type.KEYSYM,
                 GLFW.GLFW_KEY_H,
-                "category.multitweaks.gui"
+                "category.fallentweaks.gui"
         ));
         gammaKeybind = KeyBindingHelper.registerKeyBinding(new KeyBinding(
-                "key.multitweaks.toggle.gamma",
+                "key.fallentweaks.toggle.gamma",
                 InputUtil.Type.KEYSYM,
                 GLFW.GLFW_KEY_G,
-                "category.multitweaks.gui"
+                "category.fallentweaks.gui"
         ));
         hatKeybind = KeyBindingHelper.registerKeyBinding(new KeyBinding(
-                "key.multitweaks.toggle.hat",
+                "key.fallentweaks.toggle.hat",
                 InputUtil.Type.KEYSYM,
                 GLFW.GLFW_KEY_O,
-                "category.multitweaks.gui"
+                "category.fallentweaks.gui"
         ));
         ClientTickEvents.END_CLIENT_TICK.register(client -> {
             while (menuKeybind.wasPressed()) {
-                Screen screen = MultiTweaksConfig.buildScreen("title.multitweaks.config", client.currentScreen).build();
+                Screen screen = FallenTweaksConfig.buildScreen("title.fallentweaks.config", client.currentScreen).build();
                 client.openScreen(screen);
             }
         });

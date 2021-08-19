@@ -1,4 +1,4 @@
-package com.bawnorton.multitweaks.mixin;
+package com.bawnorton.fallentweaks.mixin;
 
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.gui.hud.ChatHud;
@@ -16,7 +16,7 @@ import org.spongepowered.asm.mixin.injection.Redirect;
 import java.util.ArrayList;
 import java.util.List;
 
-import static com.bawnorton.multitweaks.Global.*;
+import static com.bawnorton.fallentweaks.Global.*;
 
 
 @Mixin(ChatHudListener.class)
@@ -101,8 +101,10 @@ public class ChatHudListenerMixin {
             incomingSound = "messagechat";
             client.player.playSound(SoundEvents.BLOCK_NOTE_BLOCK_BELL, 1.0F, 0.5F);
         } else if (messageText.contains("where") || messageText.contains("how") || messageText.contains("when") || messageText.contains("why") || messageText.contains("what") || messageText.contains("?")) {
-            incomingSound = "question";
-            client.player.playSound(SoundEvents.BLOCK_NOTE_BLOCK_BELL, 1.0F, 0.5F);
+            if(!messageText.contains(client.player.getDisplayName().getString())) {
+                incomingSound = "question";
+                client.player.playSound(SoundEvents.BLOCK_NOTE_BLOCK_BELL, 1.0F, 0.5F);
+            }
         } else if (messageText.startsWith("Billy") || messageText.startsWith("Joe")) {
             incomingSound = "farm";
         } else if (messageText.startsWith("Aaron")) {
@@ -120,8 +122,10 @@ public class ChatHudListenerMixin {
         }
 
         if (messageText.startsWith("VISITATION") && messageText.contains("is now visiting your kingdom")) {
-            String playerName = messageText.substring(messageText.indexOf("VISITATION") + 11, messageText.indexOf(" is now"));
-            visitors.put(playerName, true);
+            if(leaveVisitors) {
+                String playerName = messageText.substring(messageText.indexOf("VISITATION") + 11, messageText.indexOf(" is now"));
+                visitors.put(playerName, true);
+            }
         }
 
         boolean charSpam = containsSpam(messageText);

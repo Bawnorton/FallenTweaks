@@ -1,13 +1,14 @@
-package com.bawnorton.multitweaks.mixin;
+package com.bawnorton.fallentweaks.mixin;
 
 import net.minecraft.client.sound.SoundInstance;
 import net.minecraft.client.sound.SoundSystem;
+import net.minecraft.sound.SoundEvents;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
-import static com.bawnorton.multitweaks.Global.*;
+import static com.bawnorton.fallentweaks.Global.*;
 
 @Mixin(SoundSystem.class)
 public class SoundSystemMixin {

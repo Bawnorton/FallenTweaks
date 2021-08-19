@@ -1,6 +1,6 @@
-package com.bawnorton.multitweaks.mixin;
+package com.bawnorton.fallentweaks.mixin;
 
-import com.bawnorton.multitweaks.MultiTweaksClient;
+import com.bawnorton.fallentweaks.FallenTweaksClient;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.network.AbstractClientPlayerEntity;
 import net.minecraft.text.LiteralText;
@@ -13,7 +13,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
-import static com.bawnorton.multitweaks.Global.*;
+import static com.bawnorton.fallentweaks.Global.*;
 
 @Mixin(MinecraftClient.class)
 public class MinecraftClientMixin {
@@ -23,7 +23,7 @@ public class MinecraftClientMixin {
     @Inject(method = "stop", at = @At("HEAD"))
     public void saveConfig(CallbackInfo ci) {
         try {
-            MultiTweaksClient.saveConfig();
+            FallenTweaksClient.saveConfig();
         } catch (IOException ignored) {
         }
     }
@@ -50,7 +50,7 @@ public class MinecraftClientMixin {
                     List<String> toRemove = new ArrayList<>();
                     for(String visitor: visitors.keySet()) {
                         if(!visitors.get(visitor)) {
-                            client.player.sendMessage(new LiteralText("§5§lVISITATION §d" + visitor + " §7has left your kingdom."), false);
+                            client.player.sendMessage(new LiteralText("§5§lVISITATION §6" + visitor + " §7has left your kingdom."), false);
                             toRemove.add(visitor);
                         }
                     }

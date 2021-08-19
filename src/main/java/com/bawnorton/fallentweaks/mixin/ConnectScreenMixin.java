@@ -1,6 +1,6 @@
-package com.bawnorton.multitweaks.mixin;
+package com.bawnorton.fallentweaks.mixin;
 
-import com.bawnorton.multitweaks.config.KeybindSettings;
+import com.bawnorton.fallentweaks.config.KeybindSettings;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
@@ -20,7 +20,7 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
-import static com.bawnorton.multitweaks.Global.*;
+import static com.bawnorton.fallentweaks.Global.*;
 
 @Mixin(ConnectScreen.class)
 public abstract class ConnectScreenMixin {
@@ -72,7 +72,7 @@ public abstract class ConnectScreenMixin {
                         "Bind " + keyCounts[i] + ":",
                         InputUtil.Type.KEYSYM,
                         keybindSettings[i].key.getCode(),
-                        "category.multitweaks.gui"
+                        "category.fallentweaks.gui"
                 );
                 int finalI = i;
                 ClientTickEvents.END_CLIENT_TICK.register(client -> {
@@ -104,6 +104,7 @@ public abstract class ConnectScreenMixin {
                 displayChat = booleanJson.get("displaychat").getAsBoolean();
                 barracksTime = booleanJson.get("barracksscoreboard").getAsBoolean();
                 savedRank = booleanJson.get("savedrank").getAsString();
+                leaveVisitors = booleanJson.get("leavevisitors").getAsBoolean();
             } catch (NullPointerException e) {
                 e.printStackTrace();
             }
@@ -128,7 +129,11 @@ public abstract class ConnectScreenMixin {
 
     @Inject(method = "connect", at = @At("HEAD"))
     public void saveAddress(final String address, final int port, CallbackInfo ci) {
-        loadConfig(address);
+        try {
+            loadConfig(address);
+        } catch (NullPointerException ignore) {
+
+        }
         ipAddress = address;
     }
 }

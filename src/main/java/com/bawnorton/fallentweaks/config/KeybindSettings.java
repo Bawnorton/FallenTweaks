@@ -1,4 +1,4 @@
-package com.bawnorton.multitweaks.config;
+package com.bawnorton.fallentweaks.config;
 
 import net.minecraft.client.util.InputUtil;
 

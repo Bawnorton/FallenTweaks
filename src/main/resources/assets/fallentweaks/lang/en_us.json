@@ -1,0 +1,14 @@
+{
+  "key.fallentweaks.gui": "Open Menu",
+  "key.fallentweaks.toggle.scoreboard": "Toggle Scoreboard",
+  "key.fallentweaks.toggle.gamma": "Toggle Gamma",
+  "key.fallentweaks.toggle.hat": "Cycle Crown",
+  "title.fallentweaks.config": "Fallen Kingdom Tweaks",
+  "option.fallentweaks.keybind": "Keybind",
+  "option.fallentweaks.text": "Phrase",
+  "category.fallentweaks.gui": "Fallen Kingdom Tweaks",
+  "category.fallentweaks.keybind": "Keybinds",
+  "category.fallentweaks.sounds": "Sounds",
+  "category.fallentweaks.utility": "Utility",
+  "category.fallentweaks.spam": "Spam Record"
+}
