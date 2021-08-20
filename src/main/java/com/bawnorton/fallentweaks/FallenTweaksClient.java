@@ -2,7 +2,6 @@ package com.bawnorton.fallentweaks;
 
 import com.bawnorton.fallentweaks.config.FallenTweaksConfig;
 import com.bawnorton.fallentweaks.config.KeybindSettings;
-import com.bawnorton.fallentweaks.skin.SkinManager;
 import com.google.gson.Gson;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
@@ -10,7 +9,6 @@ import com.google.gson.JsonParser;
 import net.fabricmc.api.ClientModInitializer;
 import net.fabricmc.fabric.api.client.event.lifecycle.v1.ClientTickEvents;
 import net.fabricmc.fabric.api.client.keybinding.v1.KeyBindingHelper;
-import net.minecraft.client.gui.DrawableHelper;
 import net.minecraft.client.gui.screen.Screen;
 import net.minecraft.client.options.KeyBinding;
 import net.minecraft.client.util.InputUtil;
@@ -89,7 +87,6 @@ public class FallenTweaksClient implements ClientModInitializer {
 
     public void onInitializeClient() {
         registerKeybinds();
-        SkinManager.saveSession();
     }
 
     private void registerKeybinds() {
