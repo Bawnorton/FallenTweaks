@@ -1,6 +1,6 @@
 # Multi Tweaks
 
-Check the mod on curseforge for more details [https://www.curseforge.com/minecraft/mc-mods/fallen-kingdom-tweaks]
+Check the mod on curseforge for more details [here](https://www.curseforge.com/minecraft/mc-mods/fallen-kingdom-tweaks "Fallen Kingdom Tweaks")
 
 Compainion mod for the Fallen Kingdom Server
 
