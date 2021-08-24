@@ -115,7 +115,7 @@ public class FallenTweaksConfig {
                     .setDefaultValue(betterTroops)
                     .setSaveConsumer(newValue -> betterTroops = newValue)
                     .build());
-            utilityCategory.addEntry(entryBuilder.startBooleanToggle(new LiteralText("Better Farm Selling Messages"), betterFarm)
+            utilityCategory.addEntry(entryBuilder.startBooleanToggle(new LiteralText("Better Farm Messages"), betterFarm)
                     .setDefaultValue(betterFarm)
                     .setSaveConsumer(newValue -> betterFarm = newValue)
                     .build());

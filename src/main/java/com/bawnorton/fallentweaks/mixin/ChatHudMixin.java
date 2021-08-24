@@ -123,8 +123,8 @@ public abstract class ChatHudMixin {
             String inCombat = "(.*)You're in combat! You can logout safely after (.*)\\.";
             String outCombat = "(.*)You're no longer in combat! You can logout safely\\.";
             String teleporting = "(.*)Teleporting to your kingdom home in (.*)";
-            String addQuiver = "(.*)arrows were added to your quiver\\. (.*)";
-            String removeQuiver = "(.*)arrow was removed from your quiver\\. (.*)";
+            String addQuiver = "(.*)arrow(.*)added to your quiver\\. (.*)";
+            String removeQuiver = "(.*)arrow(.*)removed from your quiver\\. (.*)";
             String fullQuiver = "(.*)Your Quiver is full(.*)";
             if (messageString.matches(inCombat)) {
                 String replacement = "§c§lCOMBAT §8| §7You're in combat for §c" + messageString.substring(messageString.indexOf("after") + 6, messageString.indexOf("sec")) + "seconds";
@@ -174,7 +174,6 @@ public abstract class ChatHudMixin {
         }
         if (index != -1) {
             String message = messages.get(index).getText().getString();
-            System.out.println(message);
             List<String> copy = new ArrayList<>(visibleStringMessages);
             Collections.reverse(copy);
             visibleMessages.remove(copy.indexOf(message));

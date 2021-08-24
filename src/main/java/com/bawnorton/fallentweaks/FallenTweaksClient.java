@@ -2,6 +2,7 @@ package com.bawnorton.fallentweaks;
 
 import com.bawnorton.fallentweaks.config.FallenTweaksConfig;
 import com.bawnorton.fallentweaks.config.KeybindSettings;
+import com.bawnorton.fallentweaks.skin.SkinManager;
 import com.google.gson.Gson;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
@@ -81,11 +82,12 @@ public class FallenTweaksClient implements ClientModInitializer {
             json.add(entry.getKey(), entry.getValue());
         }
         json.add(ipAddress, serverJson);
-        file.write(json.toString());
+        file.write(gson.toJson(json));
         file.close();
     }
 
     public void onInitializeClient() {
+        SkinManager.saveSession();
         registerKeybinds();
     }
 
